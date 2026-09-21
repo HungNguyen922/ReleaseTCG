@@ -6,7 +6,7 @@ import {
     BoardState,
     CardInstance,
     PileType,
-} from "../../../lib/game/models";
+} from "../../../../lib/game/models";
 
 import {
     createTestPile,

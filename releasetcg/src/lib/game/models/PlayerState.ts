@@ -5,8 +5,4 @@ export interface PlayerState {
 
     health: number;
 
-    leader: CardInstance;
-
-    leaderDrawn: boolean;
-
 }

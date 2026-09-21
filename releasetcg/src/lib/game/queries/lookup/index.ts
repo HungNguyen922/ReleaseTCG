@@ -6,3 +6,4 @@ export * from "./findCardReference";
 export * from "./findCardDefinition";
 export * from "./findTopGateCard";
 export * from "./findAllCards";
+export * from "./findSetZone";

@@ -2,9 +2,9 @@ import {
     BoardPosition,
     GateZone,
     PlayerSide,
-} from "../../../lib/game/models";
+} from "../../../../lib/game/models";
 
-import { CardInstance } from "../../../lib/game/models";
+import { CardInstance } from "../../../../lib/game/models";
 
 export function createTestGate(
     cards: CardInstance[] = [],

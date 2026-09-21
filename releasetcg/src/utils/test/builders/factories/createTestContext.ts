@@ -1,5 +1,5 @@
-import { createEngineContext } from "../../../lib/game/createEngineContext";
-import { CardDefinition, GameState } from "../../../lib/game/models";
+import { createEngineContext } from "../../../../lib/game/createEngineContext";
+import { CardDefinition, GameState } from "../../../../lib/game/models";
 
 export function createTestContext(
     state: GameState,

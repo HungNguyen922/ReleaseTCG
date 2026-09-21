@@ -1,7 +1,7 @@
 import {
     CardColor,
     CardDefinition,
-} from "../../../lib/game/models";
+} from "../../../../lib/game/models";
 
 import {
     Ability,

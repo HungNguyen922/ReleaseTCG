@@ -1,12 +1,12 @@
+import { EngineContext } from "@/lib/game/EngineContext";
+
 import {
     LocationReference,
 } from "../../refs";
 
 import {
-    ZoneType,
+    LocationType,
 } from "../../models";
-
-import { QueryContext } from "../QueryContext";
 
 import {
     findGate,
@@ -15,20 +15,23 @@ import {
 } from "..";
 
 export function findLocation(
-    context: QueryContext,
+    context: EngineContext,
     reference: LocationReference,
 ) {
 
-    switch (reference.type) {
+    switch (reference.locationType) {
 
-        case ZoneType.Gate:
+        case LocationType.Gate:
             return findGate(context, reference);
 
-        case ZoneType.Set:
+        case LocationType.Set:
             return findSetZone(context, reference);
 
-        default:
+        case LocationType.Pile:
             return findPile(context, reference);
+
+        default:
+            throw new Error("Unhandled location reference.");
 
     }
 

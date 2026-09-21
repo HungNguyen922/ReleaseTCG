@@ -1,3 +1,6 @@
+/*
+    Takes the compressed payload and decompresses it
+*/
 import { decompressFromEncodedURIComponent } from "lz-string";
 
 import type { DeckExport } from "@/types/decks";

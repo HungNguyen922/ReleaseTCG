@@ -1,11 +1,12 @@
+import { EngineContext } from "@/lib/game/EngineContext";
+
 import { GateStack } from "../../models";
 import { StackReference } from "../../refs";
 
 import { findGate } from "../lookup/findGate";
-import { QueryContext } from "../QueryContext";
 
 export function findStack(
-    context: QueryContext,
+    context: EngineContext,
     reference: StackReference,
 ): GateStack | null {
     return findGate(

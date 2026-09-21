@@ -12,7 +12,6 @@ export function toDeck(
   return {
     id: undefined,
     name: "Imported Deck",
-    leader: deck.leader,
     mainDeck: deck.mainDeck,
     extraDeck: deck.extraDeck,
   };

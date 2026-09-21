@@ -27,7 +27,6 @@ export async function updateDeck(
     .from("decks")
     .update({
       name: deck.name,
-      leader_id: deck.leader,
     })
     .eq("id", deckId);
 
