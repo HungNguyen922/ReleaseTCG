@@ -1,3 +1,5 @@
+// Converts a card sitting in an engine zone into a PlayableCard that can be used in the UI. 
+// This is necessary because the engine's CardInstance and CardDefinition are not directly compatible with the PlayableCard type used in the UI.
 import type {
     CardDefinition,
     CardInstance,
@@ -7,7 +9,7 @@ import type {
     PlayableCard,
 } from "@/types/cards";
 
-export function toPlayableCard(
+export function toPlayableCardFromInstance(
     instance: CardInstance,
     definition: CardDefinition,
 ): PlayableCard {
@@ -30,15 +32,21 @@ export function toPlayableCard(
 
         effect2: null,
 
-        flavor_text: null,
+        clarify1: null,
 
-        description: null,
+        clarify2: null,
+
+        clarify3: null,
+
+        flavor: null,
+
+        inspiration: null,
 
         artist: null,
 
-        expansion: null,
+        cardNumber: definition.cardNumber,
 
-        image_url: null,
+        setName: definition.setName,
 
     };
 

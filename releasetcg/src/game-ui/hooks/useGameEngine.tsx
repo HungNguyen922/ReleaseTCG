@@ -1,31 +1,66 @@
 import {
-    useMemo,
+    useEffect,
+    useRef,
+    useState,
 } from "react";
 
 import {
     TestGame,
 } from "@/utils/test/builders/TestGame";
 
-import {
-    TEST_DECK,
-} from "@/utils/test/decks/testDeck";
+import { CardDefinition } from "@/lib/game/models";
 
-export function useGameEngine() {
+import { buildPlaceholderDeck } from "@/utils/test/cards/buildPlaceholderDeck";
 
-    return useMemo(
+export function useGameEngine(
+    cardDefinitions: CardDefinition[],
+) {
 
-        () => new TestGame({
+    const [engine, setEngine] =
+        useState<TestGame | null>(null);
 
-            player1Deck:
-                TEST_DECK,
+    const hasConstructed =
+        useRef(false);
 
-            player2Deck:
-                TEST_DECK,
+    useEffect(() => {
 
-        }),
+        if (hasConstructed.current) {
+            return;
+        }
 
-        [],
+        hasConstructed.current = true;
 
-    );
+        const cardDatabase =
+            Object.fromEntries(
+                cardDefinitions.map(
+                    card => [card.id, card],
+                ),
+            );
+
+        setEngine(
+
+            new TestGame({
+
+                cardDefinitions:
+                    cardDatabase,
+
+                player1Deck:
+                    buildPlaceholderDeck(
+                        cardDefinitions,
+                    ),
+
+                player2Deck:
+                    buildPlaceholderDeck(
+                        cardDefinitions,
+                    ),
+
+            }),
+
+        );
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    return engine;
 
 }

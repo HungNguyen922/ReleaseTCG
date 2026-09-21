@@ -11,8 +11,8 @@ import {
 import HandFan from "./HandFan";
 
 import {
-    toPlayableCard,
-} from "../../utils/toPlayableCard";
+    toPlayableCardFromInstance,
+} from "@/game-ui/utils/toPlayableCardFromInstance";
 
 export default function PlayerHand() {
 
@@ -38,7 +38,7 @@ export default function PlayerHand() {
                         card,
                     );
 
-                return toPlayableCard(
+                return toPlayableCardFromInstance(
                     card,
                     definition,
                 );

@@ -8,17 +8,24 @@ import {
     useGame,
 } from "../../providers/GameProvider";
 
+import {
+    useGameRevision,
+} from "../../hooks/useGameRevision";
+
 import HandFan from "./HandFan";
 
 import {
-    toPlayableCard,
-} from "../../utils/toPlayableCard";
+    toPlayableCardFromInstance,
+} from "@/game-ui/utils/toPlayableCardFromInstance";
 
 export default function OpponentHand() {
 
     const {
         engine,
+        revealP2,
     } = useGame();
+
+    useGameRevision();
 
     const cards = useMemo(
 
@@ -33,14 +40,14 @@ export default function OpponentHand() {
                             card,
                         );
 
-                    return toPlayableCard(
+                    return toPlayableCardFromInstance(
                         card,
                         definition,
                     );
 
                 }),
 
-        [engine],
+        [engine, revealP2],
 
     );
 
@@ -48,7 +55,7 @@ export default function OpponentHand() {
 
         <HandFan
             cards={cards}
-            hidden
+            hidden={!revealP2}
             position="top"
         />
 

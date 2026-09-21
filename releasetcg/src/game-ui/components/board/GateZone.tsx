@@ -14,7 +14,7 @@ import {
 
 import GameCard from "../cards/GameCard";
 
-import { toPlayableCard } from "../../utils/toPlayableCard";
+import { toPlayableCardFromInstance } from "../../utils/toPlayableCardFromInstance";
 
 import {
     PlayerSide,
@@ -37,10 +37,10 @@ export default function GateZone({
 }: Props) {
 
     const {
-        engine,
+        engine, revision
     } = useGame();
 
-    useGameRevision();
+    console.log("revision", revision);
 
     const side =
         row === 0
@@ -66,7 +66,7 @@ export default function GateZone({
     
     const playableCard =
         topCard && cardDefinition
-            ? toPlayableCard(
+            ? toPlayableCardFromInstance(
                 topCard,
                 cardDefinition,
             )
@@ -130,8 +130,22 @@ export default function GateZone({
         console.log(
             "5. BURN FINISHED",
         );
+
+        console.log(
+            "DROPPING CARD",
+            card.id,
+            "ONTO",
+            side,
+            column,
+        );
     }
 
+    console.log(
+        "FULL STACK",
+        side,
+        column,
+        gate?.stack?.cards.map(c => c.id),
+    );
     return (
 
         <div
