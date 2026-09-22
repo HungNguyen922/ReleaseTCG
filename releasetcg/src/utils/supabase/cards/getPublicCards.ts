@@ -1,4 +1,3 @@
-// src/utils/supabase/cards/getPublicCards.ts
 import { createClient } from "@/utils/supabase/server";
 import { DatabaseCard, PlayableCard } from "@/types/cards";
 import { toPlayableCard } from "@/lib/cards/cardMapper";

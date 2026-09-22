@@ -10,11 +10,14 @@ export function createEmptyCard() {
     trait: "",
     effect1: "",
     effect2: "",
-    flavor_text: "",
-    description: "",
+    clarify1: "",
+    clarify2: "",
+    clarify3: "",
+    flavor: "",
+    inspiration: "",
     artist: "",
-    expansion: "",
+    cardNumber: "",
+    setName: "",
     pool: "draft",
-    image_url: "",
   };
 }

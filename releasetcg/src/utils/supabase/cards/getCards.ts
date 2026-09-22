@@ -1,4 +1,3 @@
-// src/utils/supabase/cards/getCards.ts
 import { createClient } from "@/utils/supabase/server";
 import type { AdminCardSummary, DatabaseCard } from "@/types/cards";
 import { PLAYABLE_CARD_SELECT } from "@/lib/cards/queries";
