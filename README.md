@@ -126,9 +126,7 @@ npm run test:watch
 
 ## 🔑 Key Game Rules (as encoded in the app)
 
-- A **Leader** must be a full 4-color card.
-- A **Main Deck** must contain exactly **20 cards**; an **Extra Deck** must contain exactly **5 cards**.
-- Non-leader cards can only be played if at least one of their colors overlaps with the Leader's color identity.
+- A **Main Deck** must contain exactly **15 cards**; an **Extra Deck** must contain exactly **5 cards**.
 - Copy limits: single-color and 4-color cards are limited to **1 copy**; 2- and 3-color cards are limited to **2 copies** (counting the Leader slot).
 
 ---
