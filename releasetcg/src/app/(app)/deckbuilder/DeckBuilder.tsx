@@ -35,8 +35,6 @@ export default function DeckBuilder({
     hoveredCard,
     hoverAnchor,
 
-    leaderCard,
-
     cardCounts,
     counts,
     mainDeckCards,
@@ -112,7 +110,6 @@ export default function DeckBuilder({
           deck={deck}
           activeZone={activeZone}
           setActiveZone={setActiveZone}
-          leaderCard={leaderCard}
         />
 
         <div className="grid min-h-0 flex-1 grid-cols-[minmax(0,1fr)_320px] gap-4">
@@ -144,7 +141,6 @@ export default function DeckBuilder({
             onDeckNameChange={
               handleDeckNameChange
             }
-            leaderCard={leaderCard}
             mainDeckCards={
               mainDeckCards
             }

@@ -1,8 +1,9 @@
 "use client";
 
-import type { Zone } from "../types";
+import type { Deck, Zone } from "../types";
 
 type Props = {
+  deck: Deck;
   activeZone: Zone;
   setActiveZone: (zone: Zone) => void;
 };

@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import type { CommunityDeck } from "@/types/community";
 import { getCommunityDeck } from "@/utils/community";
 
-import { useCards } from "@/app/(app)/deckbuildler/hooks/useCards";
+import { useCards } from "@/app/(app)/deckbuilder/hooks/useCards";
 import { useCommunityDeck } from "../hooks/useCommunityDeck";
 import { useCommunityDeckActions } from "../hooks/useCommunityDeckActions";
 
