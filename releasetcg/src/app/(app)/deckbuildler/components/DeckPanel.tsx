@@ -2,8 +2,7 @@
 
 import Image from "next/image";
 
-import type { DeckCard } from "../types";
-import type { PlayableCard } from "@/types/cards";
+import type { DeckCard, Zone } from "../types";
 import type { Deck } from "@/types/decks";
 
 import { getCardImageUrl } from "@/lib/images/getCardImageUrl";
@@ -15,18 +14,13 @@ type Props = {
 
   onDeckNameChange: (name: string) => void;
 
-  leaderCard: PlayableCard | null;
-
   mainDeckCards: DeckCard[];
   extraDeckCards: DeckCard[];
 
-  counts: {
-    main: number;
-    extra: number;
-  };
+  counts: { main: number; extra: number };
 
-  onIncrementCard: (cardId: string, zone: "main" | "extra") => void;
-  onDecrementCard: (cardId: string, zone: "main" | "extra") => void;
+  onIncrementCard: (cardId: string, zone: Zone) => void;
+  onDecrementCard: (cardId: string, zone: Zone) => void;
 
   onSave: () => void;
   onExport: () => void;
@@ -37,7 +31,6 @@ type Props = {
 export default function DeckPanel({
   deck,
   onDeckNameChange,
-  leaderCard,
   mainDeckCards,
   extraDeckCards,
   counts,
@@ -50,90 +43,31 @@ export default function DeckPanel({
 }: Props) {
   return (
     <div className="flex h-full min-h-0 flex-col rounded-lg border overflow-hidden">
-
       {/* HEADER */}
       <div className="shrink-0 space-y-3 border-b p-4">
         <div>
-            <input
-                type="text"
-                value={deck.name ?? ""}
-                onChange={(e) =>
-                onDeckNameChange(e.target.value)
-                }
-                placeholder="Deck"
-                maxLength={50}
-                className="
-                w-full
-                rounded-md
-                border
-                bg-background
-                px-3
-                py-2
-                text-sm
-                outline-none
-                focus:ring-2
-                "
-            />
-            <p className="text-sm text-muted-foreground">
-            {counts.main + counts.extra + (deck.leader ? 1 : 0)} cards
-            </p>
+          <input
+            type="text"
+            value={deck.name ?? ""}
+            onChange={(e) => onDeckNameChange(e.target.value)}
+            placeholder="Deck"
+            maxLength={50}
+            className="w-full rounded-md border bg-background px-3 py-2 text-sm outline-none focus:ring-2"
+          />
+          <p className="text-sm text-muted-foreground">
+            {counts.main + counts.extra} cards
+          </p>
         </div>
-
       </div>
 
       {/* SCROLLABLE BODY */}
       <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-8">
-
-        {/* LEADER */}
-        <section>
-          <div className="mb-3 flex items-center justify-between">
-            <h3 className="font-semibold">Leader</h3>
-            <span className="text-sm text-muted-foreground">
-              {deck.leader ? "1 / 1" : "0 / 1"}
-            </span>
-          </div>
-
-          {leaderCard ? (
-            <div className="flex items-center gap-3 rounded-lg border p-2">
-              <div className="relative h-16 w-12 overflow-hidden rounded">
-                <Image
-                  fill
-                  src={getCardImageUrl(leaderCard.image_url)}
-                  alt={leaderCard.name}
-                  className="object-cover"
-                />
-              </div>
-
-              <div className="min-w-0 flex-1 space-y-1">
-                <div className="truncate font-medium">
-                  {leaderCard.name}
-                </div>
-
-                <PaletteChips
-                    palette={leaderCard.colors}
-                    size="sm"
-                />
-
-                <StatChips
-                    power={leaderCard.power}
-                    bulk={leaderCard.bulk}
-                    size="sm"
-                />
-              </div>
-            </div>
-          ) : (
-            <div className="rounded-lg border border-dashed p-4 text-center text-sm text-muted-foreground">
-              Select a leader.
-            </div>
-          )}
-        </section>
-
         {/* MAIN DECK */}
         <section>
           <div className="mb-3 flex items-center justify-between">
             <h3 className="font-semibold">Main Deck</h3>
             <span className="text-sm text-muted-foreground">
-              {counts.main}/20
+              {counts.main}/15
             </span>
           </div>
 
@@ -149,7 +83,7 @@ export default function DeckPanel({
                   <div className="relative h-14 w-10 overflow-hidden rounded">
                     <Image
                       fill
-                      src={getCardImageUrl(card.image_url)}
+                      src={getCardImageUrl(card)}
                       alt={card.name}
                       className="object-cover"
                     />
@@ -157,46 +91,25 @@ export default function DeckPanel({
 
                   <div className="min-w-0 flex-1 space-y-1">
                     <div className="truncate text-sm font-medium">
-                        {card.name}
+                      {card.name}
                     </div>
-
-                    <PaletteChips
-                        palette={card.colors}
-                        size="sm"
-                    />
-
-                     <StatChips
-                        power={card.power}
-                        bulk={card.bulk}
-                        size="sm"
-                    />
+                    <PaletteChips palette={card.colors} size="sm" />
+                    <StatChips power={card.power} bulk={card.bulk} size="sm" />
                   </div>
 
                   <div className="flex flex-col items-center gap-1">
                     <button
-                        className="
-                        flex h-7 w-7 items-center justify-center
-                        rounded border
-                        hover:bg-muted
-                        "
-                        onClick={() => onIncrementCard(card.id, "main")}
+                      className="flex h-7 w-7 items-center justify-center rounded border hover:bg-muted"
+                      onClick={() => onIncrementCard(card.id, "main")}
                     >
-                        +
+                      +
                     </button>
-
-                    <span className="text-sm font-semibold">
-                        {count}
-                    </span>
-
+                    <span className="text-sm font-semibold">{count}</span>
                     <button
-                        className="
-                        flex h-7 w-7 items-center justify-center
-                        rounded border
-                        hover:bg-muted
-                        "
-                        onClick={() => onDecrementCard(card.id, "main")}
+                      className="flex h-7 w-7 items-center justify-center rounded border hover:bg-muted"
+                      onClick={() => onDecrementCard(card.id, "main")}
                     >
-                        −
+                      −
                     </button>
                   </div>
                 </div>
@@ -226,7 +139,7 @@ export default function DeckPanel({
                   <div className="relative h-14 w-10 overflow-hidden rounded">
                     <Image
                       fill
-                      src={getCardImageUrl(card.image_url)}
+                      src={getCardImageUrl(card)}
                       alt={card.name}
                       className="object-cover"
                     />
@@ -234,46 +147,25 @@ export default function DeckPanel({
 
                   <div className="min-w-0 flex-1 space-y-1">
                     <div className="truncate text-sm font-medium">
-                        {card.name}
+                      {card.name}
                     </div>
-
-                    <PaletteChips
-                        palette={card.colors}
-                        size="sm"
-                    />
-
-                    <StatChips
-                        power={card.power}
-                        bulk={card.bulk}
-                        size="sm"
-                    />
+                    <PaletteChips palette={card.colors} size="sm" />
+                    <StatChips power={card.power} bulk={card.bulk} size="sm" />
                   </div>
 
                   <div className="flex flex-col items-center gap-1">
                     <button
-                        className="
-                        flex h-7 w-7 items-center justify-center
-                        rounded border
-                        hover:bg-muted
-                        "
-                        onClick={() => onIncrementCard(card.id, "extra")}
+                      className="flex h-7 w-7 items-center justify-center rounded border hover:bg-muted"
+                      onClick={() => onIncrementCard(card.id, "extra")}
                     >
-                        +
+                      +
                     </button>
-
-                    <span className="text-sm font-semibold">
-                        {count}
-                    </span>
-
+                    <span className="text-sm font-semibold">{count}</span>
                     <button
-                        className="
-                        flex h-7 w-7 items-center justify-center
-                        rounded border
-                        hover:bg-muted
-                        "
-                        onClick={() => onDecrementCard(card.id, "extra")}
+                      className="flex h-7 w-7 items-center justify-center rounded border hover:bg-muted"
+                      onClick={() => onDecrementCard(card.id, "extra")}
                     >
-                        −
+                      −
                     </button>
                   </div>
                 </div>
@@ -286,34 +178,22 @@ export default function DeckPanel({
       {/* FOOTER */}
       <div className="shrink-0 border-t p-4">
         <div className="grid grid-cols-4 gap-2">
-            <button
+          <button
             onClick={onSave}
-            disabled={!deck.leader || counts.main !== 20}
+            disabled={counts.main !== 15 || counts.extra !== 5}
             className="rounded border p-2 disabled:opacity-50"
-            >
-                Save
-            </button>
-
-            <button
-            onClick={onExport}
-            className="rounded border p-2"
-            >
-                Export
-            </button>
-
-            <button
-            onClick={onImport}
-            className="rounded border p-2"
-            >
-                Import
-            </button>
-
-            <button
-            onClick={onClear}
-            className="rounded border p-2"
-            >
-                Clear
-            </button>
+          >
+            Save
+          </button>
+          <button onClick={onExport} className="rounded border p-2">
+            Export
+          </button>
+          <button onClick={onImport} className="rounded border p-2">
+            Import
+          </button>
+          <button onClick={onClear} className="rounded border p-2">
+            Clear
+          </button>
         </div>
       </div>
     </div>

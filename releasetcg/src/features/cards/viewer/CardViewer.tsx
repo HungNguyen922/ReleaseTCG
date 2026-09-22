@@ -14,36 +14,18 @@ type Props = {
   children?: ReactNode;
 };
 
-export function CardViewer({
-  card,
-  children,
-}: Props) {
-
+export function CardViewer({ card, children }: Props) {
   return (
     <div className="grid h-full md:grid-cols-[360px_minmax(0,1fr)] bg-gray-200">
-
-      {/* LEFT COLUMN */}
       <div className="flex items-center justify-center p-8">
-        <CardImage
-          name={card.name}
-          image_url={card.image_url}
-        />
+        <CardImage card={card} />
       </div>
 
-      {/* RIGHT COLUMN */}
       <div className="min-w-0 overflow-y-auto items-center p-8 rounded-3xl">
-
         <div className="space-y-5">
+          <CardHeader name={card.name} />
 
-          <CardHeader
-            name={card.name}
-          />
-
-          <CardStats
-            power={card.power}
-            bulk={card.bulk}
-            colors={card.colors}
-          />
+          <CardStats power={card.power} bulk={card.bulk} colors={card.colors} />
 
           <CardEffects
             trait={card.trait}
@@ -51,21 +33,17 @@ export function CardViewer({
             effect2={card.effect2}
           />
 
-          <CardFlavorText
-            flavor_text={card.flavor_text}
-          />
+          <CardFlavorText flavor_text={card.flavor} />
 
           <CardMetadata
             artist={card.artist}
-            expansion={card.expansion}
+            cardNumber={card.cardNumber}
+            setName={card.setName}
           />
 
           {children}
-
         </div>
-
       </div>
-
     </div>
   );
 }

@@ -107,7 +107,6 @@ export function useDeckOperations({
 
     loadDeck({
       name: "",
-      leader: null,
       mainDeck: [],
       extraDeck: [],
     });

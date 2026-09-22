@@ -5,23 +5,19 @@ const SUPABASE_PROJECT_URL =
 
 const BUCKET = "CardImages";
 
-function buildCardImageFilename(card: PlayableCard): string {
+type ImageSourceCard = Pick<PlayableCard, "cardNumber" | "setName">;
+
+function buildCardImageFilename(card: ImageSourceCard): string {
   const num = card.cardNumber?.replace("/", "_");
   const set = card.setName;
 
-  console.log("buildCardImageFilename", { num, set });
   if (!num || !set) return "1_81 - IRFO.png";
 
-  const raw = `${num}-${set}.png`;   // keep the spaces exactly as your filenames use
-  const encoded = encodeURIComponent(raw);
-
-  return `${encoded}`;
+  const raw = `${num}-${set}.png`;
+  return encodeURIComponent(raw);
 }
 
-
-export function getCardImageUrl(card: PlayableCard) {
+export function getCardImageUrl(card: ImageSourceCard) {
   const fileName = buildCardImageFilename(card);
-  console.log("getCardImageUrl", { fileName });
-  const link = `${SUPABASE_PROJECT_URL}/storage/v1/object/public/${BUCKET}/${fileName}`;
-  return link;
+  return `${SUPABASE_PROJECT_URL}/storage/v1/object/public/${BUCKET}/${fileName}`;
 }

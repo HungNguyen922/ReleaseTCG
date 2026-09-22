@@ -1,7 +1,4 @@
-import type {
-  Zone,
-  CardCounts,
-} from "./types";
+import type { Zone, CardCounts } from "./types";
 
 import type { PlayableCard } from "@/types/cards";
 import type { Deck } from "@/types/decks";
@@ -10,7 +7,7 @@ import type { Deck } from "@/types/decks";
    Helpers
 ----------------------------- */
 
-function getZoneKey(zone: "main" | "extra") {
+function getZoneKey(zone: Zone) {
   return zone === "main" ? "mainDeck" : "extraDeck";
 }
 
@@ -19,15 +16,8 @@ function getZoneKey(zone: "main" | "extra") {
 ----------------------------- */
 
 export function getDeckCounts(deck: Deck) {
-  const main = deck.mainDeck.reduce(
-    (sum, c) => sum + c.count,
-    0
-  );
-
-  const extra = deck.extraDeck.reduce(
-    (sum, c) => sum + c.count,
-    0
-  );
+  const main = deck.mainDeck.reduce((sum, c) => sum + c.count, 0);
+  const extra = deck.extraDeck.reduce((sum, c) => sum + c.count, 0);
 
   return { main, extra };
 }
@@ -36,20 +26,12 @@ export function getCardCounts(deck: Deck): CardCounts {
   const counts: CardCounts = {};
 
   for (const entry of deck.mainDeck) {
-    counts[entry.cardId] ??= {
-      main: 0,
-      extra: 0,
-    };
-
+    counts[entry.cardId] ??= { main: 0, extra: 0 };
     counts[entry.cardId].main = entry.count;
   }
 
   for (const entry of deck.extraDeck) {
-    counts[entry.cardId] ??= {
-      main: 0,
-      extra: 0,
-    };
-
+    counts[entry.cardId] ??= { main: 0, extra: 0 };
     counts[entry.cardId].extra = entry.count;
   }
 
@@ -59,20 +41,12 @@ export function getCardCounts(deck: Deck): CardCounts {
 export function getTotalCopies(deck: Deck, cardId: string) {
   let total = 0;
 
-  if (deck.leader === cardId) {
-    total += 1;
-  }
-
   for (const entry of deck.mainDeck) {
-    if (entry.cardId === cardId) {
-      total += entry.count;
-    }
+    if (entry.cardId === cardId) total += entry.count;
   }
 
   for (const entry of deck.extraDeck) {
-    if (entry.cardId === cardId) {
-      total += entry.count;
-    }
+    if (entry.cardId === cardId) total += entry.count;
   }
 
   return total;
@@ -87,14 +61,10 @@ export function getMaxCopies(card: PlayableCard) {
    Core mutation helpers
 ----------------------------- */
 
-function canAddCard(
-  deck: Deck,
-  card: PlayableCard,
-  zone: "main" | "extra"
-) {
+function canAddCard(deck: Deck, card: PlayableCard, zone: Zone) {
   const counts = getDeckCounts(deck);
 
-  if (zone === "main" && counts.main >= 20) return false;
+  if (zone === "main" && counts.main >= 15) return false;
   if (zone === "extra" && counts.extra >= 5) return false;
 
   if (getTotalCopies(deck, card.id) >= getMaxCopies(card)) {
@@ -111,7 +81,7 @@ function canAddCard(
 export function incrementCard(
   deck: Deck,
   card: PlayableCard,
-  zone: "main" | "extra"
+  zone: Zone
 ): Deck {
   if (!canAddCard(deck, card, zone)) {
     return deck;
@@ -120,37 +90,27 @@ export function incrementCard(
   const key = getZoneKey(zone);
   const list = deck[key];
 
-  const existing = list.find(
-    (c) => c.cardId === card.id
-  );
+  const existing = list.find((c) => c.cardId === card.id);
 
   if (existing) {
     return {
       ...deck,
       [key]: list.map((c) =>
-        c.cardId === card.id
-          ? { ...c, count: c.count + 1 }
-          : c
+        c.cardId === card.id ? { ...c, count: c.count + 1 } : c
       ),
     };
   }
 
   return {
     ...deck,
-    [key]: [
-      ...list,
-      {
-        cardId: card.id,
-        count: 1,
-      },
-    ],
+    [key]: [...list, { cardId: card.id, count: 1 }],
   };
 }
 
 export function decrementCard(
   deck: Deck,
   cardId: string,
-  zone: "main" | "extra"
+  zone: Zone
 ): Deck {
   const key = getZoneKey(zone);
   const list = deck[key];
@@ -158,39 +118,7 @@ export function decrementCard(
   return {
     ...deck,
     [key]: list
-      .map((c) =>
-        c.cardId === cardId
-          ? { ...c, count: c.count - 1 }
-          : c
-      )
+      .map((c) => (c.cardId === cardId ? { ...c, count: c.count - 1 } : c))
       .filter((c) => c.count > 0),
   };
-}
-
-export function setLeader(deck: Deck, cardId: string): Deck {
-  return {
-    ...deck,
-    leader: cardId,
-  };
-}
-
-/* -----------------------------
-   High-level action
------------------------------ */
-
-export function applySelection(
-  deck: Deck,
-  card: PlayableCard,
-  zone: Zone
-): Deck {
-  switch (zone) {
-    case "leader":
-      return setLeader(deck, card.id);
-
-    case "main":
-      return incrementCard(deck, card, "main");
-
-    case "extra":
-      return incrementCard(deck, card, "extra");
-  }
-}
+} 

@@ -1,23 +1,18 @@
+import { PlayableCard } from "@/types/cards";
 import { getCardImageUrl } from "@/lib/images/getCardImageUrl";
 
 type Props = {
-  name: string;
-  image_url: string | null;
+  card: Pick<PlayableCard, "name" | "cardNumber" | "setName">;
 };
 
-export function CardImage({
-  name,
-  image_url,
-}: Props) {
-  const src = image_url?.trim()
-    ? getCardImageUrl(image_url)
-    : "/placeholder.png";
+export function CardImage({ card }: Props) {
+  const src = getCardImageUrl(card);
 
   return (
     <div className="flex justify-center">
       <img
         src={src}
-        alt={name}
+        alt={card.name}
         className="w-full max-w-[340px] rounded-xl shadow-xl object-contain"
       />
     </div>
