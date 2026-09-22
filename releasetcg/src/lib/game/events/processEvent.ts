@@ -7,6 +7,8 @@ import {
 
 import { processCardMovedEvent } from "../processors/events";
 
+import { getEventListeners } from "./listeners/EventListenerRegistry";
+
 export function processEvent(
     context: EngineContext,
     event: EngineEvent,
@@ -14,66 +16,28 @@ export function processEvent(
 
     switch (event.type) {
 
-        //
-        // State events.
-        //
-
         case EventType.CardMoved:
-
             processCardMovedEvent(
                 context,
                 event,
             );
-            return;
-
-        case EventType.CardsDrawn:
-            return;
-
-        case EventType.CardsRevealed:
-            return;
-
-        case EventType.GateCreated:
-            return;
-
-        case EventType.GateDestroyed:
-            return;
-
-        case EventType.GateMoved:
-            return;
-
-        case EventType.PlayerDamaged:
-            return;
-
-        case EventType.PlayerHealed:
-            return;
-
-        //
-        // Gameplay events.
-        //
-
-        case EventType.AttackStarted:
-            return;
-
-        case EventType.AttackResolved:
-            return;
-
-        case EventType.PriorityStarted:
-            return;
-
-        case EventType.PriorityEnded:
-            return;
-
-        case EventType.PhaseStarted:
-            return;
-
-        case EventType.TurnEnded:
-            return;
+            break;
 
         default:
+            break;
 
-            throw new Error(
-                `Unhandled event type: ${event}`,
+    }
+
+    for (const listener of getEventListeners()) {
+
+        if (listener.accepts(event)) {
+
+            listener.execute(
+                context,
+                event,
             );
+
+        }
 
     }
 

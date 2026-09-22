@@ -15,7 +15,10 @@ export enum EventType {
 
     PriorityStarted = "priorityStarted",
     PriorityEnded = "priorityEnded",
-
+    
     PhaseStarted = "phaseStarted",
+    PlayerPassed = "playerPassed",
     TurnEnded = "turnEnded",
+    GameEnded = 'gameEnded',
+
 }

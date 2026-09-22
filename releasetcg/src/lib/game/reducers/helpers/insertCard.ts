@@ -64,15 +64,24 @@ export function insertCard(
                 );
             }
 
-            if (setZone.card) {
+            if (!setZone.stack) {
+                throw new Error(
+                    "insertCard: set zone has no stack.",
+                );
+            }
+
+            if (setZone.stack.cards.length > 0) {
                 throw new Error(
                     "insertCard: set zone already occupied.",
                 );
             }
 
-            setZone.card = card;
+            setZone.stack.cards.unshift(
+                card,
+            );
 
             return;
+
         }
 
 

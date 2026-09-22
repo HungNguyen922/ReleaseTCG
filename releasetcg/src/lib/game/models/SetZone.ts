@@ -1,11 +1,9 @@
 import { BoardPosition } from "./BoardPosition";
-import { CardInstance } from "./CardInstance";
+import { PileState } from "./PileState";
 import { PlayerSide } from "./PlayerSide";
 
 export interface SetZone {
     side: PlayerSide;
-
     position: BoardPosition;
-
-    card: CardInstance | null;
+    stack: PileState;
 }

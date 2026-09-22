@@ -8,3 +8,12 @@ export interface AttackResolvedEvent extends GameplayEvent {
 
     attacker: StackReference;
 }
+
+export function createAttackResolvedEvent(
+    attacker: StackReference,
+): AttackResolvedEvent {
+    return {
+        type: EventType.AttackResolved,
+        attacker,
+    };
+}

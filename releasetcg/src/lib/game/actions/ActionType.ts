@@ -7,7 +7,7 @@ export enum ActionType {
     Split = "SPLIT",
     Liminal = "LIMINAL",
 
-    SetCard = "SET_CARD",
+    Set = "SET",
 
     DrawLeader = "DRAW_LEADER",
 

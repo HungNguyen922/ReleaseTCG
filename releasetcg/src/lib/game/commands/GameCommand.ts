@@ -15,10 +15,13 @@ import { ResolveAttackCommand } from "./ResolveAttackCommand";
 import { RevealCardsCommand } from "./RevealCardsCommand";
 import { ShufflePileCommand } from "./ShufflePileCommand";
 import { StartPriorityCommand } from "./StartPriorityCommand";
+import { PassCommand } from "./PassCommand";
+import { EnforceMaxHandCommand } from "./EnforceMaxHandCommand";
 
 export type GameCommand =
     | MoveCardCommand
     | MoveGateCommand
+    | PassCommand
     | CreateGateCommand
     | DestroyGateCommand
     | CreatePileCommand
@@ -34,4 +37,5 @@ export type GameCommand =
     | StartPriorityCommand
     | EndPriorityCommand
     | BeginPhaseCommand
-    | EndTurnCommand;
+    | EndTurnCommand
+    | EnforceMaxHandCommand;

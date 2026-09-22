@@ -7,10 +7,16 @@ import {
 } from "../../commands";
 
 import {
+    createBeginPhaseCommand,
+} from "../../commands/BeginPhaseCommand";
 
+
+import {
     markActionTaken,
-
+    incrementCardsPlayedThisTurn,
 } from "@/lib/game/turn";
+
+import { TurnPhase } from "../../models";
 
 export function processChainAction(
 
@@ -52,12 +58,16 @@ export function processChainAction(
 
     context.commandQueue.push(
 
-        createStartPriorityCommand(
+        createBeginPhaseCommand(
 
-            action.player,
+            TurnPhase.Fill,
 
         ),
 
     );
 
+    incrementCardsPlayedThisTurn(
+        context,
+        action.openingUnit.length + action.chain.length,
+    );
 }

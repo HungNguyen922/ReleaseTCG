@@ -10,3 +10,14 @@ export interface DamagePlayerCommand extends BaseCommand {
 
     amount: number;
 }
+
+export function createDamagePlayerCommand(
+    player: PlayerReference,
+    amount: number,
+): DamagePlayerCommand {
+    return {
+        type: CommandType.DamagePlayer,
+        player,
+        amount,
+    };
+}

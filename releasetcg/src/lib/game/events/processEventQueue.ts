@@ -15,7 +15,7 @@ export function processEventQueue(
     ) {
 
         const event =
-            context.eventQueue.shift();
+            context.eventQueue.pop();
 
         if (!event) {
             continue;

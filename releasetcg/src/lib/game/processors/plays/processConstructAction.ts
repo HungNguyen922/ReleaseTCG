@@ -8,9 +8,11 @@ import {
 
     createMoveCardCommand,
 
-    createStartPriorityCommand,
-
 } from "@/lib/game/commands";
+
+import {
+    createBeginPhaseCommand,
+} from "../../commands/BeginPhaseCommand";
 
 import {
 
@@ -19,10 +21,11 @@ import {
 } from "@/lib/game/queries";
 
 import {
-
     markActionTaken,
-
+    incrementCardsPlayedThisTurn,
 } from "@/lib/game/turn";
+
+import { TurnPhase } from "../../models";
 
 export function processConstructAction(
 
@@ -91,13 +94,15 @@ export function processConstructAction(
     //
 
     context.commandQueue.push(
+    
+        createBeginPhaseCommand(
 
-        createStartPriorityCommand(
-
-            action.player,
+            TurnPhase.Fill,
 
         ),
 
     );
+
+    incrementCardsPlayedThisTurn(context, action.cards.length);
 
 }

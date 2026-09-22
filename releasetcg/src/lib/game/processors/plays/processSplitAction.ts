@@ -5,18 +5,19 @@ import {
 } from "@/lib/game/actions";
 
 import {
-
     createMoveCardCommand,
-
-    createStartPriorityCommand,
-
 } from "@/lib/game/commands";
 
 import {
+    createBeginPhaseCommand,
+} from "../../commands/BeginPhaseCommand";
 
+import {
     markActionTaken,
-
+    incrementCardsPlayedThisTurn,
 } from "@/lib/game/turn";
+
+import { TurnPhase } from "../../models";
 
 export function processSplitAction(
 
@@ -56,14 +57,15 @@ export function processSplitAction(
     }
 
 
-    context.commandQueue.push(
+   context.commandQueue.push(
 
-        createStartPriorityCommand(
+        createBeginPhaseCommand(
 
-            action.player,
+            TurnPhase.Fill,
 
         ),
 
     );
 
+    incrementCardsPlayedThisTurn(context, action.cards.length);
 }

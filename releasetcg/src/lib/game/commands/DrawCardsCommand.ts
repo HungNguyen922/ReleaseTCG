@@ -15,3 +15,16 @@ export interface DrawCardsCommand extends BaseCommand {
 
     source: LocationReference;
 }
+
+export function createDrawCardsCommand(
+    player: PlayerReference,
+    count: number,
+    source: LocationReference
+): DrawCardsCommand {
+    return {
+        type: CommandType.DrawCards,
+        player,
+        count,
+        source,
+    };
+}

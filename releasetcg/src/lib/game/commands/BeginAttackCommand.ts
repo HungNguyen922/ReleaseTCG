@@ -8,3 +8,12 @@ export interface BeginAttackCommand extends BaseCommand {
 
     attacker: StackReference;
 }
+
+export function createBeginAttackCommand(
+    attacker: StackReference,
+): BeginAttackCommand {
+    return {
+        type: CommandType.BeginAttack,
+        attacker,
+    };
+}

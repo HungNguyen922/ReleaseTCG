@@ -19,6 +19,10 @@ export interface TestCardDefinitionOptions {
 
     colors?: CardColor[];
 
+    cardNumber?: string;
+
+    setName?: string;
+
     abilities?: Ability[];
 
 }
@@ -70,6 +74,18 @@ export function createTestCardDefinition(
             options.abilities ??
 
             [],
+
+        cardNumber:
+
+            options.cardNumber ??
+
+            "1_81",
+
+        setName:
+
+            options.setName ??
+        
+            "IRFO",
 
     };
 

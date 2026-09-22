@@ -3,18 +3,19 @@ import { EngineContext } from "@/lib/game/EngineContext";
 import { BoundAction } from "@/lib/game/actions";
 
 import {
-
     createMoveCardCommand,
-
-    createStartPriorityCommand,
-
 } from "@/lib/game/commands";
 
 import {
+    createBeginPhaseCommand,
+} from "../../commands/BeginPhaseCommand";
 
+import {
     markActionTaken,
-
+    incrementCardsPlayedThisTurn,
 } from "@/lib/game/turn";
+
+import { TurnPhase } from "../../models";
 
 export function processBoundAction(
 
@@ -85,13 +86,17 @@ export function processBoundAction(
     //
 
     context.commandQueue.push(
+    
+        createBeginPhaseCommand(
 
-        createStartPriorityCommand(
-
-            action.player,
+            TurnPhase.Fill,
 
         ),
 
     );
 
+    incrementCardsPlayedThisTurn(
+        context,
+        1 + action.middle.length + 1,
+    );
 }

@@ -47,16 +47,20 @@ export function removeCard(
                 location.location,
             );
 
-            if (!setZone) {
+            if (!setZone?.stack) {
                 throw new Error(
                     "removeCard: set zone not found.",
                 );
             }
 
-            setZone.card = null;
+            setZone.stack.cards.splice(
+                location.position,
+                1,
+            );
 
             return;
-        }
+
+            }
 
 
         case LocationType.Pile: {

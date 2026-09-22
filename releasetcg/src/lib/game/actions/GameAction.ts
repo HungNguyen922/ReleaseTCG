@@ -4,6 +4,7 @@ import { ChainAction } from "./ChainAction";
 import { BoundAction } from "./BoundAction";
 import { SplitAction } from "./SplitAction";
 import { LiminalAction } from "./LiminalAction";
+import { SetAction } from "./SetAction";
 
 import { DealDamageAction } from "./DealDamageAction";
 import { DrawCardsAction } from "./DrawCardsAction";
@@ -14,7 +15,6 @@ import { PassAction } from "./PassAction";
 import { ResolveEffectsAction } from "./ResolveEffectsAction";
 import { ResolveAttackAction } from "./ResolveAttackAction";
 import { RevealCardsAction } from "./RevealCardsAction";
-import { SetCardAction } from "./SetCardAction";
 import { ShufflePileAction } from "./ShufflePileAction";
 
 
@@ -25,7 +25,7 @@ export type GameAction =
     | BoundAction
     | SplitAction
     | LiminalAction
-    | SetCardAction
+    | SetAction
     | DrawLeaderAction
     | PassAction
     | EndPriorityAction

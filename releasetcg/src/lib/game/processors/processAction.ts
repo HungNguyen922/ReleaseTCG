@@ -7,6 +7,7 @@ import {
 
 import {
     processBurnAction, processConstructAction, processChainAction, processBoundAction, processSplitAction, processLiminalAction,
+    processSetAction,
 } from "./plays";
 
 
@@ -71,6 +72,15 @@ export function processAction(
 
             return;
 
+        case ActionType.Set:
+
+            processSetAction(
+                context,
+                action,
+            );
+
+            return;
+            
         default:
 
             throw new Error(

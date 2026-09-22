@@ -14,6 +14,7 @@ import {
     PriorityState,
     TurnState,
     CardColor,
+    CardDefinition,
 } from "@/lib/game/models";
 
 import {
@@ -74,6 +75,7 @@ export class TestGame {
 
     constructor(
         options: {
+            cardDefinitions?: Record<string, CardDefinition>;
             player1Deck?: DeckExport;
             player2Deck?: DeckExport;
         } = {},
@@ -85,11 +87,13 @@ export class TestGame {
         this.player1 = {
             id: "P1",
             health: 10,
+            passesRemaining: 1,
         };
 
         this.player2 = {
             id: "P2",
             health: 10,
+            passesRemaining: 1,
         };
 
         this.state = {
@@ -143,7 +147,68 @@ export class TestGame {
 
                 ],
 
-                setZones: [],
+                setZones: [
+                    {
+                        side: PlayerSide.Top,
+                        position: 0,
+                        stack: {
+                            id: "SET_P2_0",
+                            pileType: PileType.Temporary,
+                            ownerId: "P2",
+                            cards: [],
+                        },
+                    },
+                    {
+                        side: PlayerSide.Top,
+                        position: 1,
+                        stack: {
+                            id: "SET_P2_1",
+                            pileType: PileType.Temporary,
+                            ownerId: "P2",
+                            cards: [],
+                        },
+                    },
+                    {
+                        side: PlayerSide.Top,
+                        position: 2,
+                        stack: {
+                            id: "SET_P2_2",
+                            pileType: PileType.Temporary,
+                            ownerId: "P2",
+                            cards: [],
+                        },
+                    },
+                    {
+                        side: PlayerSide.Bottom,
+                        position: 0,
+                        stack: {
+                            id: "SET_P1_0",
+                            pileType: PileType.Temporary,
+                            ownerId: "P1",
+                            cards: [],
+                        },
+                    },
+                    {
+                        side: PlayerSide.Bottom,
+                        position: 1,
+                        stack: {
+                            id: "SET_P1_1",
+                            pileType: PileType.Temporary,
+                            ownerId: "P1",
+                            cards: [],
+                        },
+                    },
+                    {
+                        side: PlayerSide.Bottom,
+                        position: 2,
+                        stack: {
+                            id: "SET_P1_2",
+                            pileType: PileType.Temporary,
+                            ownerId: "P1",
+                            cards: [],
+                        },
+                    },
+                ]
 
             },
 
@@ -197,7 +262,11 @@ export class TestGame {
 
                 phase: TurnPhase.Action,
 
+                setsPlayedThisTurn: 0,
+
                 actionTaken: false,
+
+                cardsPlayedThisTurn: 0,
 
             } satisfies TurnState,
 
@@ -217,37 +286,17 @@ export class TestGame {
                 {},
             );
 
-        //
-        // Now that context exists, we can
-        // safely create test cards.
-        //
+        if (options.cardDefinitions) {
 
-        this.addGateCard({
+            this.registerCardDefinitions(
+                options.cardDefinitions,
+            );
 
-            side: PlayerSide.Bottom,
+        } else {
 
-            position: 1,
+            this.registerTestCardDefinitions();
 
-            ownerId: "P1",
-
-            name: "Test Gate",
-
-            power: 1,
-
-            bulk: 1,
-
-            colors: [
-                CardColor.Red,
-                CardColor.Blue,
-            ],
-
-        });
-
-        //
-        // Load real test decks if supplied.
-        //
-
-        this.registerTestCardDefinitions();
+        }
 
         if (options.player1Deck) {
 
@@ -256,13 +305,52 @@ export class TestGame {
                 options.player1Deck,
             );
 
-            //this.drawStartingHand("P1");
+            this.setupStarterGate(
+                "P1",
+                PlayerSide.Bottom,
+            );
+
+            this.drawStartingHand("P1");
+
+        } else {
+
+            //
+            // Fallback for tests that don't
+            // supply a real deck.
+            //
+
+            this.addGateCard({
+
+                side: PlayerSide.Bottom,
+
+                position: 1,
+
+                ownerId: "P1",
+
+                name: "Test Gate",
+
+                power: 1,
+
+                bulk: 1,
+
+                colors: [
+                    CardColor.Red,
+                    CardColor.Blue,
+                ],
+
+                cardNumber: "1/81",
+                setName: "IRFO",
+
+            });
+
             this.addHandCard({
                 playerId: "P1",
                 name: "Test Burn Card 1",
                 power: 1,
                 bulk: 1,
                 colors: [CardColor.Red],
+                cardNumber: "1/81",
+                setName: "IRFO",
             });
 
             this.addHandCard({
@@ -271,7 +359,10 @@ export class TestGame {
                 power: 2,
                 bulk: 1,
                 colors: [CardColor.Blue],
+                cardNumber: "1/81",
+                setName: "IRFO",
             });
+
         }
 
         if (options.player2Deck) {
@@ -279,6 +370,11 @@ export class TestGame {
             this.loadDeck(
                 "P2",
                 options.player2Deck,
+            );
+
+            this.setupStarterGate(
+                "P2",
+                PlayerSide.Top,
             );
 
             this.drawStartingHand("P2");
@@ -458,7 +554,10 @@ export class TestGame {
 
         };
 
-        gate.stack.cards.unshift(card);
+        gate.stack = {
+            ...gate.stack,
+            cards: [card, ...gate.stack.cards],
+        };
 
         this.notify();
 
@@ -521,6 +620,19 @@ export class TestGame {
 
     }
 
+    public setReference(
+        side: PlayerSide,
+        position: BoardPosition,
+    ): LocationReference {
+
+        return {
+            locationType: LocationType.Set,
+            side,
+            position,
+        };
+
+    }
+
     public playIntent(
         playType: PlayType,
         cards: CardInstance[],
@@ -533,7 +645,7 @@ export class TestGame {
 
             player: {
 
-                id: this.player1.id,
+                id: this.state.turn.currentPlayerId,
 
             },
 
@@ -770,6 +882,26 @@ export class TestGame {
 
     }
 
+    public set(
+        card: CardInstance,
+        side: PlayerSide,
+        position: BoardPosition,
+    ): void {
+
+        this.play(
+            this.playIntent(
+                PlayType.Set,
+                [card],
+                [
+                    this.setReference(
+                        side,
+                        position,
+                    ),
+                ],
+            ),
+        );
+
+    }
     public card(
         cardId: string,
     ): CardInstance | null {
@@ -909,6 +1041,19 @@ export class TestGame {
 
     }
 
+    private registerCardDefinitions(
+        definitions: Record<string, CardDefinition>,
+    ): void {
+
+        for (const id in definitions) {
+
+            this.context.cardDatabase[id] =
+                definitions[id];
+
+        }
+
+    }
+
     private registerTestCardDefinitions(): void {
 
         for (
@@ -1006,6 +1151,59 @@ export class TestGame {
 
     }
 
+    private setupStarterGate(
+        playerId: string,
+        side: PlayerSide,
+    ): void {
+
+        const deck =
+            this.getPile(
+                PileType.MainDeck,
+                playerId,
+            );
+
+        if (deck.cards.length === 0) {
+            return;
+        }
+
+        const randomIndex =
+            Math.floor(
+                Math.random() * deck.cards.length,
+            );
+
+        const [starter] =
+            deck.cards.splice(
+                randomIndex,
+                1,
+            );
+
+        let gate =
+            this.state.board.gateZones.find(
+                gate =>
+                    gate.side === side &&
+                    gate.position === 1,
+            );
+
+        if (!gate) {
+
+            gate = {
+                side,
+                position: 1,
+                stack: { cards: [] },
+            };
+
+            this.state.board.gateZones.push(
+                gate,
+            );
+
+        }
+
+        gate.stack ??= { cards: [] };
+
+        gate.stack.cards.unshift(starter);
+
+    }
+
     private drawStartingHand(
         playerId: string,
     ): void {
@@ -1024,7 +1222,7 @@ export class TestGame {
 
         for (
             let i = 0;
-            i < 5;
+            i < 4;
             i++
         ) {
 

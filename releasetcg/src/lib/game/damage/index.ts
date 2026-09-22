@@ -7,3 +7,4 @@ export * from "./applyDamageToPlayer";
 export * from "./applyDamageToCard";
 
 export * from "./canTakeDamage";
+

@@ -1,4 +1,4 @@
-import { PlayType } from "../../models";
+import { PlayType, TurnPhase } from "../../models";
 
 import { PlayIntent } from "@/lib/game/intents";
 
@@ -13,13 +13,29 @@ import {
     compileConstruct,
     compileLiminal,
     compileSplit,
+    compileSet,
 } from "./";
+import { failure } from "../utils";
 
 export function compilePlayIntent(
     context: EngineContext,
     intent: PlayIntent,
 ): RuleResult {
 
+    if (
+        intent.playType !== PlayType.Set &&
+        (
+            context.state.turn.phase !== TurnPhase.Action ||
+            context.state.turn.actionTaken
+        )
+    ) {
+
+        return failure(
+            "You've already made your Play this turn.",
+        );
+
+    }
+    
     switch (intent.playType) {
 
         case PlayType.Burn:
@@ -40,6 +56,8 @@ export function compilePlayIntent(
         case PlayType.Liminal:
             return compileLiminal(context, intent);
 
+        case PlayType.Set:
+            return compileSet(context, intent);
     }
 
 }

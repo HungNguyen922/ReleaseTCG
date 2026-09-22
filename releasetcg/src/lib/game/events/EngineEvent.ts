@@ -13,19 +13,30 @@ import { GateDestroyedEvent } from "./state/GateDestroyedEvent";
 import { GateMovedEvent } from "./state/GateMovedEvent";
 import { PlayerDamagedEvent } from "./state/PlayerDamagedEvent";
 import { PlayerHealedEvent } from "./state/PlayerHealedEvent";
+import { PlayerPassedEvent } from "./state";
+import { GameEndedEvent } from "./gameplay";
 
 export type EngineEvent =
-    | AttackResolvedEvent
-    | AttackStartedEvent
     | CardMovedEvent
     | CardsDrawnEvent
     | CardsRevealedEvent
+
     | GateCreatedEvent
     | GateDestroyedEvent
     | GateMovedEvent
-    | PhaseStartedEvent
+
     | PlayerDamagedEvent
     | PlayerHealedEvent
-    | PriorityEndedEvent
+
+    | AttackResolvedEvent
+    | AttackStartedEvent
+
     | PriorityStartedEvent
-    | TurnEndedEvent;
+    | PriorityEndedEvent
+
+
+    | PhaseStartedEvent
+    | PlayerPassedEvent
+    | TurnEndedEvent
+    | GameEndedEvent;
+    

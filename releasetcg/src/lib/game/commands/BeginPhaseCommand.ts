@@ -8,3 +8,12 @@ export interface BeginPhaseCommand extends BaseCommand {
 
     phase: TurnPhase;
 }
+
+export function createBeginPhaseCommand(
+    phase: TurnPhase,
+): BeginPhaseCommand {
+    return {
+        type: CommandType.BeginPhase,
+        phase,
+    };
+}

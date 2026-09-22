@@ -1,6 +1,7 @@
 export enum CommandType {
     MoveCard = "moveCard",
     MoveGate = "moveGate",
+    Pass = "pass",
 
     CreateGate = "createGate",
     DestroyGate = "destroyGate",
@@ -24,4 +25,5 @@ export enum CommandType {
 
     BeginPhase = "beginPhase",
     EndTurn = "endTurn",
+    EnforceMaxHand = "enforceMaxHand",
 }

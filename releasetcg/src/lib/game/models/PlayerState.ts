@@ -5,4 +5,6 @@ export interface PlayerState {
 
     health: number;
 
+    passesRemaining: number;
+
 }

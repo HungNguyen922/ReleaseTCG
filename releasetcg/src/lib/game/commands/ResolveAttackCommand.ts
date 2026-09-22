@@ -8,3 +8,12 @@ export interface ResolveAttackCommand extends BaseCommand {
 
     attacker: StackReference;
 }
+
+export function createResolveAttackCommand(
+    attacker: StackReference,
+): ResolveAttackCommand {
+    return {
+        type: CommandType.ResolveAttack,
+        attacker,
+    };
+}

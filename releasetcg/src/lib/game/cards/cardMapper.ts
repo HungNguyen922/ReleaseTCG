@@ -1,3 +1,4 @@
+// converts a raw Supabase row into a PlayableCard that can be used in the UI.
 import {
     DatabaseCard,
 } from "@/types/cards";
@@ -42,13 +43,13 @@ function parseColors(
 
     return [
 
-        parseColor(card.color1),
+        parseColor(card.Color1),
 
-        parseColor(card.color2),
+        parseColor(card.Color2),
 
-        parseColor(card.color3),
+        parseColor(card.Color3),
 
-        parseColor(card.color4),
+        parseColor(card.Color4),
 
     ].filter(
 
@@ -70,17 +71,21 @@ export function toCardDefinition(
 
         id: card.id,
 
-        name: card.name,
+        name: card.Name,
 
-        power: card.power,
+        power: card.Power,
 
-        bulk: card.bulk,
+        bulk: card.Bulk,
 
         colors: parseColors(card),  
 
         trait: null,
 
         abilities: [],
+
+        cardNumber: card.CardNumber,
+
+        setName: card.SetName,
 
     };
 

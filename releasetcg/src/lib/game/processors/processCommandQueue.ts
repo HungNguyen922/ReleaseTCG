@@ -38,7 +38,7 @@ export function processCommandQueue(
         ) {
 
             const event =
-                context.eventQueue.shift();
+                context.eventQueue.pop();
 
 
             if (!event) {

@@ -9,3 +9,4 @@ export * from "./ChainAction";
 export * from "./BoundAction";
 export * from "./SplitAction";
 export * from "./LiminalAction";
+export * from "./SetAction";

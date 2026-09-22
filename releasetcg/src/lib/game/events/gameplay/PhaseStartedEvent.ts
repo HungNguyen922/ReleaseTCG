@@ -8,3 +8,12 @@ export interface PhaseStartedEvent extends GameplayEvent {
 
     phase: TurnPhase;
 }
+
+export function createPhaseStartedEvent(
+    phase: TurnPhase,
+): PhaseStartedEvent {
+    return {
+        type: EventType.PhaseStarted,
+        phase,
+    };
+}

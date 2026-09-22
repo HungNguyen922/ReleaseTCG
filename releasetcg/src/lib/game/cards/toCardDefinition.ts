@@ -12,23 +12,19 @@ function parseColors(
 ): CardColor[] {
 
     const values = [
-
-        card.color1,
-        card.color2,
-        card.color3,
-        card.color4,
-
+        card.Color1,
+        card.Color2,
+        card.Color3,
+        card.Color4,
     ];
 
-    return values.filter(
-
-        (
-            color,
-        ): color is CardColor =>
-
-            color !== null,
-
-    );
+    return values
+        .map(color => color?.trim().toLowerCase() ?? null)
+        .filter(
+            (color): color is CardColor =>
+                color !== null &&
+                (Object.values(CardColor) as string[]).includes(color),
+        ) as CardColor[];
 
 }
 
@@ -40,11 +36,11 @@ export function toCardDefinition(
 
         id: card.id,
 
-        name: card.name,
+        name: card.Name,
 
-        power: card.power,
+        power: card.Power,
 
-        bulk: card.bulk,
+        bulk: card.Bulk,
 
         colors: parseColors(card),
 
@@ -61,6 +57,10 @@ export function toCardDefinition(
         //
 
         abilities: [],
+
+        cardNumber: card.CardNumber,
+
+        setName: card.SetName,
 
     };
 

@@ -6,3 +6,4 @@ export * from "./GateDestroyedEvent";
 export * from "./GateMovedEvent";
 export * from "./PlayerDamagedEvent";
 export * from "./PlayerHealedEvent";
+export * from "./PlayerPassedEvent";

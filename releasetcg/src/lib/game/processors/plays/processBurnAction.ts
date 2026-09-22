@@ -11,13 +11,12 @@ import {
 } from "../../commands/MoveCardCommand";
 
 import {
-    createStartPriorityCommand,
-} from "../../commands/StartPriorityCommand";
+    createBeginAttackCommand,
+} from "../../commands/BeginAttackCommand";
 
 import {
-
     markActionTaken,
-
+    incrementCardsPlayedThisTurn,
 } from "@/lib/game/turn";
 
 export function processBurnAction(
@@ -28,10 +27,6 @@ export function processBurnAction(
     markActionTaken(
         context,
     );
-    
-    //
-    // Queue a move for every played card.
-    //
 
     for (const reference of action.cards) {
 
@@ -62,18 +57,16 @@ export function processBurnAction(
 
     }
 
-    //
-    // Begin priority.
-    //
-
     context.commandQueue.push(
 
-        createStartPriorityCommand(
+        createBeginAttackCommand(
 
-            action.player,
+            { gate: action.gate },
 
         ),
 
     );
+
+    incrementCardsPlayedThisTurn(context, action.cards.length);
 
 }

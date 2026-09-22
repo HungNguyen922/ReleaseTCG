@@ -7,3 +7,5 @@ export * from "./getNextPlayer";
 export * from "./processTurnPhase";
 export * from "./startTurn";
 export * from "./markActionTaken";
+export * from "./incrementSetsPlayedThisTurn";
+export * from "./incrementCardsPlayedThisTurn";

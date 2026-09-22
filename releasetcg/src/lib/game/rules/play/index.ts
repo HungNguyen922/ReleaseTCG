@@ -6,3 +6,4 @@ export * from "./compileConstruct";
 export * from "./compileSplit";
 export * from "./compileBound";
 export * from "./compileLiminal";
+export * from "./compileSet";

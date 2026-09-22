@@ -4,3 +4,4 @@ export * from "./processChainAction";
 export * from "./processBoundAction";
 export * from "./processSplitAction";
 export * from "./processLiminalAction";
+export * from "./processSetAction";

@@ -8,3 +8,12 @@ export interface AttackStartedEvent extends GameplayEvent {
 
     attacker: StackReference;
 }
+
+export function createAttackStartedEvent(
+    attacker: StackReference,
+): AttackStartedEvent {
+    return {
+        type: EventType.AttackStarted,
+        attacker,
+    };
+}

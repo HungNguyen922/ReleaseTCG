@@ -1,10 +1,27 @@
+import { PlayableCard } from "@/types/cards";
+
 const SUPABASE_PROJECT_URL =
   "https://nelejiwidolomftgrcjt.supabase.co";
 
 const BUCKET = "CardImages";
 
-export function getCardImageUrl(fileName: string | null) {
-  if (!fileName) return "/placeholder.png";
+function buildCardImageFilename(card: PlayableCard): string {
+  const num = card.cardNumber?.replace("/", "_");
+  const set = card.setName;
 
-  return `${SUPABASE_PROJECT_URL}/storage/v1/object/public/${BUCKET}/${fileName}`;
+  console.log("buildCardImageFilename", { num, set });
+  if (!num || !set) return "1_81 - IRFO.png";
+
+  const raw = `${num}-${set}.png`;   // keep the spaces exactly as your filenames use
+  const encoded = encodeURIComponent(raw);
+
+  return `${encoded}`;
+}
+
+
+export function getCardImageUrl(card: PlayableCard) {
+  const fileName = buildCardImageFilename(card);
+  console.log("getCardImageUrl", { fileName });
+  const link = `${SUPABASE_PROJECT_URL}/storage/v1/object/public/${BUCKET}/${fileName}`;
+  return link;
 }
