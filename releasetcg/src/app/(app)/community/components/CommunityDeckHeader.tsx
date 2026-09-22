@@ -1,3 +1,7 @@
+/*
+    SOS
+    I legit don't remember what this does.
+*/
 import Image from "next/image";
 
 import type { CommunityDeck } from "@/types/community";

@@ -7,8 +7,6 @@ export type Deck = {
   id?: string;
   name: string;
 
-  leader: string | null;
-
   mainDeck: DeckEntry[];
   extraDeck: DeckEntry[];
 };
@@ -18,8 +16,6 @@ export type SavedDeck = {
   ownerId: string;
 
   name: string;
-
-  leader: string;
 
   mainDeck: DeckEntry[];
   extraDeck: DeckEntry[];
@@ -32,16 +28,10 @@ export type DeckSummary = {
   id: string;
   name: string;
 
-  leaderId: string | null;
-  leaderName: string | null;
-  leaderImage: string | null;
-
   updatedAt: string;
 };
 
 export type DeckExport = {
-    leader: string;
-
     mainDeck: DeckEntry[];
 
     extraDeck: DeckEntry[];

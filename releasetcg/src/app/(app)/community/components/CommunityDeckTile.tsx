@@ -27,6 +27,7 @@ export default function CommunityDeckTile({
         "
       >
         <div className="relative h-60 w-full overflow-hidden">
+          {/*
             {deck.leaderImage ? (
                 <Image
                 src={getCardImageUrl(deck.leaderImage)}
@@ -40,6 +41,7 @@ export default function CommunityDeckTile({
                 No Leader
                 </div>
             )}
+          */}
         </div>
 
         <div className="space-y-2 p-4">

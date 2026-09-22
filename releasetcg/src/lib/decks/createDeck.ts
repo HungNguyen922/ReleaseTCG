@@ -13,7 +13,6 @@ export async function createDeck(
       .insert({
         owner_id: ownerId,
         name: deck.name,
-        leader_id: deck.leader,
       })
       .select()
       .single();

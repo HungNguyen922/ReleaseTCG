@@ -10,8 +10,6 @@ export type CommunityDeckRow = {
 
   deck: Deck;
 
-  leader_id: string | null;
-
   is_public: boolean;
 
   created_at: string;
@@ -25,10 +23,6 @@ export type CommunityDeckSummary = {
   description: string;
 
   author: string;
-
-  leaderId: string | null;
-  leaderName: string | null;
-  leaderImage: string | null;
 
   likes: number;
   comments: number;
@@ -46,10 +40,6 @@ export type CommunityDeck = {
 
   author: string;
   ownerId: string;
-
-  leaderId: string | null;
-  leaderName: string | null;
-  leaderImage: string | null;
 
   likes: number;
   comments: number;
