@@ -27,7 +27,6 @@ export async function createDeck({
     .insert({
       owner_id: user.id,
       name,
-      leader_id: deck.leader,
       main_deck: deck.mainDeck,
       extra_deck: deck.extraDeck,
     })

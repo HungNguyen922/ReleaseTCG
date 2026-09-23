@@ -49,7 +49,7 @@ export function useDeckOperations({
       loadDeck(savedDeck);
 
       if (!deckId && savedDeck.id) {
-          router.replace(`/deckbuildler/${savedDeck.id}`);
+          router.replace(`/deckbuilder/${savedDeck.id}`);
       }
 
       alert("Deck saved!");
@@ -107,7 +107,7 @@ export function useDeckOperations({
 
     loadDeck({
       name: "",
-      leader: null,
+      coverCardId: null,
       mainDeck: [],
       extraDeck: [],
     });

@@ -1,29 +1,33 @@
-import { CardForm, DatabaseCard } from "./types";
+import { CardForm } from "./types";
+import type { DatabaseCard } from "@/types/cards";
 
 export function normalizeCard(card: DatabaseCard): CardForm {
   return {
-    name: card.name,
-    power: card.power,
-    bulk: card.bulk,
+    name: card.Name,
+    power: card.Power,
+    bulk: card.Bulk,
 
-    color1: card.color1 ?? "",
-    color2: card.color2 ?? "",
-    color3: card.color3 ?? "",
-    color4: card.color4 ?? "",
+    color1: card.Color1 ?? "",
+    color2: card.Color2 ?? "",
+    color3: card.Color3 ?? "",
+    color4: card.Color4 ?? "",
 
-    trait: card.trait ?? "",
+    trait: card.Trait ?? "",
 
-    effect1: card.effect1 ?? "",
-    effect2: card.effect2 ?? "",
+    effect1: card.Effect1 ?? "",
+    effect2: card.Effect2 ?? "",
 
-    flavor_text: card.flavor_text ?? "",
-    description: card.description ?? "",
+    clarify1: card.Clarify1 ?? "",
+    clarify2: card.Clarify2 ?? "",
+    clarify3: card.Clarify3 ?? "",
 
-    artist: card.artist ?? "",
-    expansion: card.expansion ?? "",
+    flavor: card.Flavor ?? "",
+    inspiration: card.Inspiration ?? "",
+
+    artist: card.Artist ?? "",
+    cardNumber: card.CardNumber ?? "",
+    setName: card.SetName ?? "",
 
     pool: card.pool ?? "",
-
-    image_url: card.image_url ?? "",
   };
 }

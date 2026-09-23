@@ -1,7 +1,4 @@
-import type {
-  DeckExport,
-  SavedDeck,
-} from "@/types/decks";
+import type { DeckExport, SavedDeck } from "@/types/decks";
 
 type Options = {
   id: string;
@@ -11,18 +8,10 @@ type Options = {
   updatedAt: string;
 };
 
-/**
- * Converts an exported deck into a saved deck.
- */
-export function toSavedDeck(
-  deck: DeckExport,
-  options: Options
-): SavedDeck {
+export function toSavedDeck(deck: DeckExport, options: Options): SavedDeck {
   return {
     ...options,
-
-    leader: deck.leader,
-
+    coverCardId: deck.coverCardId,
     mainDeck: deck.mainDeck,
     extraDeck: deck.extraDeck,
   };

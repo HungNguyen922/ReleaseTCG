@@ -9,8 +9,6 @@ export enum ActionType {
 
     Set = "SET",
 
-    DrawLeader = "DRAW_LEADER",
-
     Pass = "PASS",
 
     StartPriority = "START_PRIORITY",

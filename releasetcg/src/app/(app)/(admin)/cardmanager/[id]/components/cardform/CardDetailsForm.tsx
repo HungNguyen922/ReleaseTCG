@@ -4,7 +4,6 @@ import { BasicInfoSection } from "./sections/BasicInfoSection";
 import { PaletteSection } from "./sections/PaletteSection";
 import { CardTextSection } from "./sections/CardTextSection";
 import { MetadataSection } from "./sections/MetadataSection";
-import { ImageSection } from "./sections/ImageSection";
 import { Footer } from "./Footer";
 
 import { CardForm } from "./types";
@@ -17,39 +16,29 @@ type Props = {
   initial: CardForm;
 };
 
-export function CardDetailsForm({
-  id,
-  initial,
-}: Props) {
+export function CardDetailsForm({ id, initial }: Props) {
   const {
     form,
     update,
-
     handleSave,
     handleDelete,
-
     hasChanges,
     state,
     isNew,
-  } = useCardForm({
-    id,
-    initial,
-  });
+  } = useCardForm({ id, initial });
 
-  const imageSrc = form.image_url.trim()
-    ? getCardImageUrl(form.image_url)
-    : "/placeholder.png";
+  const imageSrc =
+    form.cardNumber.trim() && form.setName.trim()
+      ? getCardImageUrl(form)
+      : "/placeholder.png";
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[1fr_420px] h-screen">
-
       <div className="overflow-y-auto p-8 space-y-8">
-
         <BasicInfoSection form={form} update={update} />
         <PaletteSection form={form} update={update} />
         <CardTextSection form={form} update={update} />
         <MetadataSection form={form} update={update} />
-        <ImageSection form={form} update={update} />
 
         <Footer
           isNew={isNew}
@@ -58,7 +47,6 @@ export function CardDetailsForm({
           onSave={handleSave}
           onDelete={handleDelete}
         />
-
       </div>
 
       <div className="hidden border-l bg-muted/10 p-6 md:flex">
@@ -70,7 +58,6 @@ export function CardDetailsForm({
           />
         </div>
       </div>
-
     </div>
   );
 }

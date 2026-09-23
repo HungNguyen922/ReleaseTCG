@@ -1,7 +1,7 @@
 import { CardForm, UpdateCard } from "../types";
 import { CardSection } from "../CardSection";
-import { TextInput } from "../../../../../../components/fields/TextInput";
-import { SelectInput } from "../../../../../../components/fields/SelectInput";
+import { TextInput } from "@/app/(app)/components/fields/TextInput";
+import { SelectInput } from "@/app/(app)/components/fields/SelectInput";
 import { POOL_OPTIONS } from "../constants";
 
 type Props = {
@@ -9,35 +9,32 @@ type Props = {
   update: UpdateCard;
 };
 
-export function MetadataSection({
-  form,
-  update,
-}: Props) {
+export function MetadataSection({ form, update }: Props) {
   return (
     <CardSection title="Metadata">
       <TextInput
-        label="Expansion"
-        value={form.expansion}
-        onChange={(value) =>
-          update("expansion", value)
-        }
+        label="Set Name"
+        value={form.setName}
+        onChange={(value) => update("setName", value)}
+      />
+
+      <TextInput
+        label="Card Number"
+        value={form.cardNumber}
+        onChange={(value) => update("cardNumber", value)}
       />
 
       <TextInput
         label="Artist"
         value={form.artist}
-        onChange={(value) =>
-          update("artist", value)
-        }
+        onChange={(value) => update("artist", value)}
       />
 
       <SelectInput
         label="Pool"
         value={form.pool}
         options={POOL_OPTIONS}
-        onChange={(value) =>
-          update("pool", value)
-        }
+        onChange={(value) => update("pool", value)}
       />
     </CardSection>
   );

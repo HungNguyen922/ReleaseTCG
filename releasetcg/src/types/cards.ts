@@ -22,7 +22,6 @@ export type CardCore = {
   cardNumber: string | null;
   setName: string | null;
 
-  
   flavor: string | null;
   inspiration: string | null;
 
@@ -48,18 +47,12 @@ export type DatabaseCard = {
   Color3: string | null;
   Color4: string | null;
 
-<<<<<<< Updated upstream
-  trait: string | null;
-  effect1: string | null;
-  effect2: string | null;
-=======
   Trait: string | null;
   Effect1: string | null;
   Effect2: string | null;
   Clarify1: string | null;
   Clarify2: string | null;
   Clarify3: string | null;
->>>>>>> Stashed changes
 
   CardNumber: string | null;
   SetName: string | null;

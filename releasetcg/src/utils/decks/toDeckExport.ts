@@ -1,11 +1,9 @@
 import type { Deck } from "@/types/decks";
 import type { DeckExport } from "@/types/decks";
 
-export function toDeckExport(
-    deck: Deck
-): DeckExport {
+export function toDeckExport(deck: Deck): DeckExport {
   return {
-    leader: deck.leader!,
+    coverCardId: deck.coverCardId,
     mainDeck: deck.mainDeck,
     extraDeck: deck.extraDeck,
   };

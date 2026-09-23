@@ -8,7 +8,6 @@ import { SetAction } from "./SetAction";
 
 import { DealDamageAction } from "./DealDamageAction";
 import { DrawCardsAction } from "./DrawCardsAction";
-import { DrawLeaderAction } from "./DrawLeaderAction";
 import { EndPriorityAction } from "./EndPriorityAction";
 import { HealPlayerAction } from "./HealPlayerAction";
 import { PassAction } from "./PassAction";
@@ -26,7 +25,6 @@ export type GameAction =
     | SplitAction
     | LiminalAction
     | SetAction
-    | DrawLeaderAction
     | PassAction
     | EndPriorityAction
     | ResolveEffectsAction

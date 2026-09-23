@@ -1,30 +1,6 @@
-export type DatabaseCard = {
-  id: string;
+import type { DatabaseCard } from "@/types/cards";
 
-  name: string;
-  power: number;
-  bulk: number;
-
-  color1: string | null;
-  color2: string | null;
-  color3: string | null;
-  color4: string | null;
-
-  trait: string | null;
-
-  effect1: string | null;
-  effect2: string | null;
-
-  flavor_text: string | null;
-  description: string | null;
-
-  artist: string | null;
-  expansion: string | null;
-
-  pool: string | null;
-
-  image_url: string | null;
-};
+export type { DatabaseCard };
 
 export type CardForm = {
   name: string;
@@ -41,15 +17,18 @@ export type CardForm = {
   effect1: string;
   effect2: string;
 
-  flavor_text: string;
-  description: string;
+  clarify1: string;
+  clarify2: string;
+  clarify3: string;
+
+  flavor: string;
+  inspiration: string;
 
   artist: string;
-  expansion: string;
+  cardNumber: string;
+  setName: string;
 
   pool: string;
-
-  image_url: string;
 };
 
 export type UpdateCardDTO = {

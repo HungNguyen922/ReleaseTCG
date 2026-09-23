@@ -5,6 +5,9 @@ type CardLike = {
   trait?: string | null;
   effect1?: string | null;
   effect2?: string | null;
+  clarify1?: string | null;
+  clarify2?: string | null;
+  clarify3?: string | null;
 
   power: number;
   bulk: number;
@@ -29,6 +32,9 @@ function matchesSearch(card: CardLike, query: string) {
     card.trait,
     card.effect1,
     card.effect2,
+    card.clarify1,
+    card.clarify2,
+    card.clarify3,
   ]
     .filter(Boolean)
     .join(" ")

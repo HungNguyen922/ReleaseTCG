@@ -42,7 +42,7 @@ releasetcg/
 │   │   │   ├── (admin)/cardmanager/  # Admin-only card CRUD
 │   │   │   ├── community/            # Browse & publish community decks
 │   │   │   ├── dashboard/            # Profile + saved decks
-│   │   │   ├── deckbuildler/         # Deck builder + server actions
+│   │   │   ├── deckbuilder/         # Deck builder + server actions
 │   │   │   ├── gallery/              # Public card gallery
 │   │   │   └── components/           # Shared cards/fields UI
 │   │   ├── (auth)/emailpassword/     # Login / sign up
