@@ -95,7 +95,7 @@ export default function DeckTileMenu({
       <DropdownMenuContent align="end">
 
         <DropdownMenuItem asChild>
-          <Link href={`/deckbuildler/${deck.id}`}>
+          <Link href={`/deckbuilder/${deck.id}`}>
             Edit
           </Link>
         </DropdownMenuItem>
