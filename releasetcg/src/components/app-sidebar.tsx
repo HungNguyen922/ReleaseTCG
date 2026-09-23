@@ -53,7 +53,7 @@ const data = {
       items: [
         {
           title: "New Deck",
-          url: "/deckbuildler",
+          url: "/deckbuilder",
         },
         {
           title: "Community Decks",

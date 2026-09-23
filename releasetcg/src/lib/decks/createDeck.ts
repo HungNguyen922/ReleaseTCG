@@ -7,16 +7,15 @@ export async function createDeck(
   ownerId: string,
   deck: Deck
 ): Promise<Deck> {
-  const { data: createdDeck, error: deckError } =
-    await supabase
-      .from("decks")
-      .insert({
-        owner_id: ownerId,
-        name: deck.name,
-        leader_id: deck.leader,
-      })
-      .select()
-      .single();
+  const { data: createdDeck, error: deckError } = await supabase
+  .from("decks")
+  .insert({
+    owner_id: ownerId,
+    name: deck.name,
+    cover_card_id: deck.coverCardId,
+  })
+  .select()
+  .single();
 
   if (deckError || !createdDeck) {
     throw deckError ?? new Error("Failed to create deck.");

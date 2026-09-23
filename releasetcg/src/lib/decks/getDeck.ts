@@ -1,19 +1,14 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-
-import type {
-  Deck,
-  DeckEntry,
-} from "@/types/decks";
+import type { Deck, DeckEntry } from "@/types/decks";
 
 export async function getDeck(
   supabase: SupabaseClient,
   ownerId: string,
   deckId: string
 ): Promise<Deck> {
-  // Load deck metadata
   const { data: deckRow, error: deckError } = await supabase
     .from("decks")
-    .select("id, name, leader_id")
+    .select("id, name, cover_card_id")
     .eq("id", deckId)
     .eq("owner_id", ownerId)
     .single();
@@ -22,7 +17,6 @@ export async function getDeck(
     throw new Error("Deck not found.");
   }
 
-  // Load deck contents
   const { data: cardRows, error: cardsError } = await supabase
     .from("deck_cards")
     .select("card_id, count, zone")
@@ -36,10 +30,7 @@ export async function getDeck(
   const extraDeck: DeckEntry[] = [];
 
   for (const row of cardRows ?? []) {
-    const entry: DeckEntry = {
-      cardId: row.card_id,
-      count: row.count,
-    };
+    const entry: DeckEntry = { cardId: row.card_id, count: row.count };
 
     if (row.zone === "main") {
       mainDeck.push(entry);
@@ -51,7 +42,7 @@ export async function getDeck(
   return {
     id: deckRow.id,
     name: deckRow.name,
-    leader: deckRow.leader_id,
+    coverCardId: deckRow.cover_card_id ?? null,
     mainDeck,
     extraDeck,
   };

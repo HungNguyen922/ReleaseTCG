@@ -1,86 +1,48 @@
 import { createClient } from "@/utils/supabase/server";
-import type { AdminCardSummary, CardPool } from "@/types/cards";
-
-type SupabaseCardRow = {
-  id: string;
-  name: string;
-
-  power: number;
-  bulk: number;
-
-  color1: string | null;
-  color2: string | null;
-  color3: string | null;
-  color4: string | null;
-
-  trait: string | null;
-  effect1: string | null;
-  effect2: string | null;
-
-  flavor_text: string | null;
-  description: string | null;
-  artist: string | null;
-  expansion: string | null;
-
-  image_url: string | null;
-
-  pool: CardPool;
-};
+import type { AdminCardSummary, DatabaseCard } from "@/types/cards";
+import { PLAYABLE_CARD_SELECT } from "@/lib/cards/queries";
 
 export async function getCards(): Promise<AdminCardSummary[]> {
   const supabase = await createClient();
 
   const { data, error } = await supabase
     .from("cards")
-    .select(`
-      id,
-      name,
-      power,
-      bulk,
-      color1,
-      color2,
-      color3,
-      color4,
-      trait,
-      effect1,
-      effect2,
-      flavor_text,
-      description,
-      artist,
-      expansion,
-      image_url,
-      pool
-    `);
+    .select(PLAYABLE_CARD_SELECT);
 
   if (error || !data) {
     console.error(error);
     return [];
   }
 
-  const rows = data as SupabaseCardRow[];
+  const rows = data as DatabaseCard[];
 
   return rows.map((card): AdminCardSummary => ({
     id: card.id,
-    name: card.name,
+    name: card.Name,
 
-    power: card.power,
-    bulk: card.bulk,
+    power: card.Power,
+    bulk: card.Bulk,
 
-    trait: card.trait,
-    effect1: card.effect1,
-    effect2: card.effect2,
+    trait: card.Trait,
+    effect1: card.Effect1,
+    effect2: card.Effect2,
 
-    flavor_text: card.flavor_text,
-    description: card.description,
-    artist: card.artist,
-    expansion: card.expansion,
-    image_url: card.image_url,
+    clarify1: card.Clarify1,
+    clarify2: card.Clarify2,
+    clarify3: card.Clarify3,
+
+    artist: card.Artist,
+    cardNumber: card.CardNumber,
+    setName: card.SetName,
+
+    flavor: card.Flavor,
+    inspiration: card.Inspiration,
 
     palette: [
-      card.color1,
-      card.color2,
-      card.color3,
-      card.color4,
+      card.Color1,
+      card.Color2,
+      card.Color3,
+      card.Color4,
     ].filter(Boolean) as string[],
 
     pool: card.pool,

@@ -1,3 +1,5 @@
+// These should all be client-safe wrappers
+
 export * from "./checksum";
 
 export * from "./encodeDeck";

@@ -15,60 +15,44 @@ export function useCommunityDeck(
   cards: PlayableCard[]
 ) {
   const cardMap = useMemo(() => {
-    return new Map(cards.map(card => [card.id, card]));
+    return new Map(cards.map((card) => [card.id, card]));
   }, [cards]);
 
-  const leaderCard = useMemo(() => {
-    if (!deck?.deck.leader) {
-      return null;
-    }
+  const coverCardId = useMemo(() => {
+    if (!deck) return null;
+    return deck.deck.coverCardId ?? deck.deck.extraDeck[0]?.cardId ?? null;
+  }, [deck]);
 
-    return cardMap.get(deck.deck.leader) ?? null;
-  }, [deck, cardMap]);
+  const coverCard = useMemo(() => {
+    if (!coverCardId) return null;
+    return cardMap.get(coverCardId) ?? null;
+  }, [coverCardId, cardMap]);
 
   const mainDeckCards = useMemo(() => {
     if (!deck) return [];
 
     return deck.deck.mainDeck
-      .map(entry => {
+      .map((entry) => {
         const card = cardMap.get(entry.cardId);
-
-        return card
-          ? {
-              card,
-              count: entry.count,
-            }
-          : null;
+        return card ? { card, count: entry.count } : null;
       })
-      .filter(
-        (value): value is DisplayCard =>
-          value !== null
-      );
+      .filter((value): value is DisplayCard => value !== null);
   }, [deck, cardMap]);
 
   const extraDeckCards = useMemo(() => {
     if (!deck) return [];
 
     return deck.deck.extraDeck
-      .map(entry => {
+      .map((entry) => {
         const card = cardMap.get(entry.cardId);
-
-        return card
-          ? {
-              card,
-              count: entry.count,
-            }
-          : null;
+        return card ? { card, count: entry.count } : null;
       })
-      .filter(
-        (value): value is DisplayCard =>
-          value !== null
-      );
+      .filter((value): value is DisplayCard => value !== null);
   }, [deck, cardMap]);
 
   return {
     cardMap,
-    leaderCard,
+    coverCard,
     mainDeckCards,
     extraDeckCards,
   };

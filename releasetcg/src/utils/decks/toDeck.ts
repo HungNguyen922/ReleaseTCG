@@ -6,13 +6,11 @@ import type {
 /**
  * Converts an exported deck into an editable deck.
  */
-export function toDeck(
-  deck: DeckExport
-): Deck {
+export function toDeck(deck: DeckExport): Deck {
   return {
     id: undefined,
     name: "Imported Deck",
-    leader: deck.leader,
+    coverCardId: deck.coverCardId,
     mainDeck: deck.mainDeck,
     extraDeck: deck.extraDeck,
   };

@@ -1,7 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 import type { CommunityDeck } from "@/types/community";
-import type { DeckEntry } from "@/types/decks";
+import type { Deck } from "@/types/decks";
 
 export async function getCommunityDeck(
   supabase: SupabaseClient,
@@ -22,10 +22,9 @@ export async function getCommunityDeck(
         username
       ),
 
-      leader:leader_id (
-        id,
-        name,
-        image_url
+      cover:cover_card_id (
+        CardNumber,
+        SetName
       )
     `)
     .eq("id", id)
@@ -37,12 +36,9 @@ export async function getCommunityDeck(
 
   const post = data as any;
 
-  const storedDeck = post.deck as {
-    name: string;
-    leader: string | null;
-    mainDeck: DeckEntry[];
-    extraDeck: DeckEntry[];
-  };
+  const storedDeck = post.deck as Deck;
+
+  const cover = Array.isArray(post.cover) ? post.cover[0] : post.cover;
 
   return {
     id: post.id,
@@ -52,7 +48,7 @@ export async function getCommunityDeck(
 
     deck: {
       name: storedDeck.name,
-      leader: storedDeck.leader,
+      coverCardId: storedDeck.coverCardId,
       mainDeck: storedDeck.mainDeck,
       extraDeck: storedDeck.extraDeck,
     },
@@ -60,9 +56,9 @@ export async function getCommunityDeck(
     author: post.owner?.username ?? "Unknown",
     ownerId: post.owner_id,
 
-    leaderId: post.leader?.id ?? null,
-    leaderName: post.leader?.name ?? null,
-    leaderImage: post.leader?.image_url ?? null,
+    coverCardId: post.cover_card_id ?? storedDeck.coverCardId ?? null,
+    coverCardNumber: cover?.CardNumber ?? null,
+    coverSetName: cover?.SetName ?? null,
 
     likes: 0,
     comments: 0,

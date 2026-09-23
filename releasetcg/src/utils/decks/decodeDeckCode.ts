@@ -1,3 +1,6 @@
+/*
+  converts the payload and checksum into a deck object
+*/
 import { checksum } from "./checksum";
 import { decodeDeck } from "./decodeDeck";
 import type { DeckExport } from "@/types/decks";
