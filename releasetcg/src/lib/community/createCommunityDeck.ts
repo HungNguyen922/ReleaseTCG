@@ -20,7 +20,7 @@ export async function createCommunityDeck(
 
       deck,
 
-      leader_id: deck.leader,
+      cover_card_id: deck.coverCardId,
     })
     .select()
     .single();
