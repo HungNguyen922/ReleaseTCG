@@ -15,6 +15,10 @@ function getZoneKey(zone: Zone) {
    Queries
 ----------------------------- */
 
+export function setCoverCard(deck: Deck, cardId: string): Deck {
+  return { ...deck, coverCardId: cardId };
+}
+
 export function getDeckCounts(deck: Deck) {
   const main = deck.mainDeck.reduce((sum, c) => sum + c.count, 0);
   const extra = deck.extraDeck.reduce((sum, c) => sum + c.count, 0);
@@ -107,18 +111,20 @@ export function incrementCard(
   };
 }
 
-export function decrementCard(
-  deck: Deck,
-  cardId: string,
-  zone: Zone
-): Deck {
+export function decrementCard(deck: Deck, cardId: string, zone: Zone): Deck {
   const key = getZoneKey(zone);
   const list = deck[key];
 
+  const updatedList = list
+    .map((c) => (c.cardId === cardId ? { ...c, count: c.count - 1 } : c))
+    .filter((c) => c.count > 0);
+
+  const stillInDeck = updatedList.some((c) => c.cardId === cardId);
+
   return {
     ...deck,
-    [key]: list
-      .map((c) => (c.cardId === cardId ? { ...c, count: c.count - 1 } : c))
-      .filter((c) => c.count > 0),
+    [key]: updatedList,
+    coverCardId:
+      deck.coverCardId === cardId && !stillInDeck ? null : deck.coverCardId,
   };
-} 
+}

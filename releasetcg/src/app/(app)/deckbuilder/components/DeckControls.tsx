@@ -1,9 +1,8 @@
 "use client";
 
-import type { Deck, Zone } from "../types";
+import type { Zone } from "../types";
 
 type Props = {
-  deck: Deck;
   activeZone: Zone;
   setActiveZone: (zone: Zone) => void;
 };
@@ -27,9 +26,7 @@ export default function DeckControls({ activeZone, setActiveZone }: Props) {
         <button
           onClick={() => setActiveZone("main")}
           className={`rounded border px-3 py-1 transition ${
-            activeZone === "main"
-              ? "bg-green-100 border-green-400"
-              : "hover:bg-muted"
+            activeZone === "main" ? "bg-green-100 border-green-400" : "hover:bg-muted"
           }`}
         >
           Main
@@ -38,9 +35,7 @@ export default function DeckControls({ activeZone, setActiveZone }: Props) {
         <button
           onClick={() => setActiveZone("extra")}
           className={`rounded border px-3 py-1 transition ${
-            activeZone === "extra"
-              ? "bg-purple-100 border-purple-400"
-              : "hover:bg-muted"
+            activeZone === "extra" ? "bg-purple-100 border-purple-400" : "hover:bg-muted"
           }`}
         >
           Extra

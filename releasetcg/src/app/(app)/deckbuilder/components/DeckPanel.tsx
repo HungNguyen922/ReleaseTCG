@@ -14,6 +14,9 @@ type Props = {
 
   onDeckNameChange: (name: string) => void;
 
+  coverCardId: string | null;
+  onSetCover: (cardId: string) => void;
+
   mainDeckCards: DeckCard[];
   extraDeckCards: DeckCard[];
 
@@ -31,6 +34,8 @@ type Props = {
 export default function DeckPanel({
   deck,
   onDeckNameChange,
+  coverCardId,
+  onSetCover,
   mainDeckCards,
   extraDeckCards,
   counts,
@@ -41,6 +46,60 @@ export default function DeckPanel({
   onImport,
   onClear,
 }: Props) {
+  function renderCardRow(card: DeckCard["card"], count: number, zone: Zone) {
+    const isCover = coverCardId === card.id;
+
+    return (
+      <div
+        key={card.id}
+        className="flex items-center gap-3 rounded-lg border p-2"
+      >
+        <div className="relative h-14 w-10 overflow-hidden rounded">
+          <Image
+            fill
+            src={getCardImageUrl(card)}
+            alt={card.name}
+            className="object-cover"
+          />
+        </div>
+
+        <div className="min-w-0 flex-1 space-y-1">
+          <div className="truncate text-sm font-medium">{card.name}</div>
+          <PaletteChips palette={card.colors} size="sm" />
+          <StatChips power={card.power} bulk={card.bulk} size="sm" />
+        </div>
+
+        <button
+          onClick={() => onSetCover(card.id)}
+          title={isCover ? "Deck cover" : "Set as deck cover"}
+          className={`flex h-7 w-7 items-center justify-center rounded border text-sm transition ${
+            isCover
+              ? "border-amber-400 bg-amber-100 text-amber-600"
+              : "hover:bg-muted text-muted-foreground"
+          }`}
+        >
+          {isCover ? "★" : "☆"}
+        </button>
+
+        <div className="flex flex-col items-center gap-1">
+          <button
+            className="flex h-7 w-7 items-center justify-center rounded border hover:bg-muted"
+            onClick={() => onIncrementCard(card.id, zone)}
+          >
+            +
+          </button>
+          <span className="text-sm font-semibold">{count}</span>
+          <button
+            className="flex h-7 w-7 items-center justify-center rounded border hover:bg-muted"
+            onClick={() => onDecrementCard(card.id, zone)}
+          >
+            −
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-full min-h-0 flex-col rounded-lg border overflow-hidden">
       {/* HEADER */}
@@ -75,45 +134,9 @@ export default function DeckPanel({
             {mainDeckCards.length === 0 ? (
               <p className="text-sm text-muted-foreground">Empty</p>
             ) : (
-              mainDeckCards.map(({ card, count }) => (
-                <div
-                  key={card.id}
-                  className="flex items-center gap-3 rounded-lg border p-2"
-                >
-                  <div className="relative h-14 w-10 overflow-hidden rounded">
-                    <Image
-                      fill
-                      src={getCardImageUrl(card)}
-                      alt={card.name}
-                      className="object-cover"
-                    />
-                  </div>
-
-                  <div className="min-w-0 flex-1 space-y-1">
-                    <div className="truncate text-sm font-medium">
-                      {card.name}
-                    </div>
-                    <PaletteChips palette={card.colors} size="sm" />
-                    <StatChips power={card.power} bulk={card.bulk} size="sm" />
-                  </div>
-
-                  <div className="flex flex-col items-center gap-1">
-                    <button
-                      className="flex h-7 w-7 items-center justify-center rounded border hover:bg-muted"
-                      onClick={() => onIncrementCard(card.id, "main")}
-                    >
-                      +
-                    </button>
-                    <span className="text-sm font-semibold">{count}</span>
-                    <button
-                      className="flex h-7 w-7 items-center justify-center rounded border hover:bg-muted"
-                      onClick={() => onDecrementCard(card.id, "main")}
-                    >
-                      −
-                    </button>
-                  </div>
-                </div>
-              ))
+              mainDeckCards.map(({ card, count }) =>
+                renderCardRow(card, count, "main")
+              )
             )}
           </div>
         </section>
@@ -131,45 +154,9 @@ export default function DeckPanel({
             {extraDeckCards.length === 0 ? (
               <p className="text-sm text-muted-foreground">Empty</p>
             ) : (
-              extraDeckCards.map(({ card, count }) => (
-                <div
-                  key={card.id}
-                  className="flex items-center gap-3 rounded-lg border p-2"
-                >
-                  <div className="relative h-14 w-10 overflow-hidden rounded">
-                    <Image
-                      fill
-                      src={getCardImageUrl(card)}
-                      alt={card.name}
-                      className="object-cover"
-                    />
-                  </div>
-
-                  <div className="min-w-0 flex-1 space-y-1">
-                    <div className="truncate text-sm font-medium">
-                      {card.name}
-                    </div>
-                    <PaletteChips palette={card.colors} size="sm" />
-                    <StatChips power={card.power} bulk={card.bulk} size="sm" />
-                  </div>
-
-                  <div className="flex flex-col items-center gap-1">
-                    <button
-                      className="flex h-7 w-7 items-center justify-center rounded border hover:bg-muted"
-                      onClick={() => onIncrementCard(card.id, "extra")}
-                    >
-                      +
-                    </button>
-                    <span className="text-sm font-semibold">{count}</span>
-                    <button
-                      className="flex h-7 w-7 items-center justify-center rounded border hover:bg-muted"
-                      onClick={() => onDecrementCard(card.id, "extra")}
-                    >
-                      −
-                    </button>
-                  </div>
-                </div>
-              ))
+              extraDeckCards.map(({ card, count }) =>
+                renderCardRow(card, count, "extra")
+              )
             )}
           </div>
         </section>

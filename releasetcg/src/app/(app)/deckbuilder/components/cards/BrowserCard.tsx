@@ -61,7 +61,7 @@ export default function BrowserCard({
     >
       <div className="relative aspect-[1/.5] bg-black/5">
         <Image
-          src={getCardImageUrl(card.image_url)}
+          src={getCardImageUrl(card)}
           alt={card.name}
           fill
           className="object-cover"

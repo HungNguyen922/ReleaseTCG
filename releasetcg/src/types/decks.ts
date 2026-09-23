@@ -7,6 +7,8 @@ export type Deck = {
   id?: string;
   name: string;
 
+  coverCardId: string | null;
+
   mainDeck: DeckEntry[];
   extraDeck: DeckEntry[];
 };
@@ -16,6 +18,7 @@ export type SavedDeck = {
   ownerId: string;
 
   name: string;
+  coverCardId: string | null;
 
   mainDeck: DeckEntry[];
   extraDeck: DeckEntry[];
@@ -28,19 +31,23 @@ export type DeckSummary = {
   id: string;
   name: string;
 
+  coverCardId: string | null;
+  coverCardNumber: string | null;
+  coverSetName: string | null;
+
   updatedAt: string;
 };
 
 export type DeckExport = {
-    mainDeck: DeckEntry[];
-
-    extraDeck: DeckEntry[];
-}
+  coverCardId: string | null;
+  mainDeck: DeckEntry[];
+  extraDeck: DeckEntry[];
+};
 
 export type DeckValidationResult = {
   valid: boolean;
   errors: string[];
-};  
+};
 
 export type GetImportedDeckResult = {
   deck: Deck | null;

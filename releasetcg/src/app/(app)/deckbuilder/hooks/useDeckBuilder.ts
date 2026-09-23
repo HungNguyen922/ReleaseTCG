@@ -6,7 +6,13 @@ import type { PlayableCard } from "@/types/cards";
 import type { Deck } from "@/types/decks";
 import type { Zone } from "../types";
 
-import { incrementCard, decrementCard, getCardCounts, getDeckCounts } from "../deckUtils";
+import {
+  incrementCard,
+  decrementCard,
+  getCardCounts,
+  getDeckCounts,
+  setCoverCard,
+} from "../deckUtils";
 
 export type DeckCard = {
   card: PlayableCard;
@@ -16,6 +22,7 @@ export type DeckCard = {
 export function useDeckBuilder(cards: PlayableCard[]) {
   const [deck, setDeck] = useState<Deck>({
     name: "",
+    coverCardId: null,
     mainDeck: [],
     extraDeck: [],
   });
@@ -37,6 +44,11 @@ export function useDeckBuilder(cards: PlayableCard[]) {
   const counts = useMemo(() => getDeckCounts(deck), [deck]);
   const cardCounts = useMemo(() => getCardCounts(deck), [deck]);
 
+  // Resolved cover: explicit choice, else fallback to the first extra deck card.
+  const effectiveCoverCardId = useMemo(() => {
+    return deck.coverCardId ?? deck.extraDeck[0]?.cardId ?? null;
+  }, [deck.coverCardId, deck.extraDeck]);
+
   const mapDeckCards = useCallback(
     (entries: { cardId: string; count: number }[]): DeckCard[] =>
       entries.flatMap((entry) => {
@@ -55,6 +67,10 @@ export function useDeckBuilder(cards: PlayableCard[]) {
     () => mapDeckCards(deck.extraDeck),
     [deck.extraDeck, mapDeckCards]
   );
+
+  const handleSetCoverCard = useCallback((cardId: string) => {
+    setDeck((prev) => setCoverCard(prev, cardId));
+  }, []);
 
   const handleDeckNameChange = useCallback((name: string) => {
     setDeck((prev) => ({ ...prev, name }));
@@ -97,6 +113,8 @@ export function useDeckBuilder(cards: PlayableCard[]) {
     counts,
     cardCounts,
 
+    effectiveCoverCardId,
+
     mainDeckCards,
     extraDeckCards,
 
@@ -108,6 +126,7 @@ export function useDeckBuilder(cards: PlayableCard[]) {
     handleCardClick,
     handleIncrementCard,
     handleDecrementCard,
+    handleSetCoverCard,
 
     loadDeck,
   };

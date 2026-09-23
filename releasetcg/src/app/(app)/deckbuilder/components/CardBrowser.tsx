@@ -4,7 +4,7 @@ import type { PlayableCard } from "@/types/cards";
 
 import type { CardCounts } from "../types";
 
-import BrowserCard from "../cards/BrowserCard";
+import BrowserCard from "./cards/BrowserCard";
 
 type Props = {
   cards: PlayableCard[];

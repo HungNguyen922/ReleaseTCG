@@ -24,11 +24,12 @@ export async function updateDeck(
 
   // Update deck metadata
   const { error: deckError } = await supabase
-    .from("decks")
-    .update({
-      name: deck.name,
-    })
-    .eq("id", deckId);
+  .from("decks")
+  .update({
+    name: deck.name,
+    cover_card_id: deck.coverCardId,
+  })
+  .eq("id", deckId);
 
   if (deckError) {
     throw deckError;
