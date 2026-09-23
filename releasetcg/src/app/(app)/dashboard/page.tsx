@@ -1,6 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import { Box } from "./components/box";
-import { EditProfileButton } from "./components/EditProfileButton";
+import { EditProfileButton } from "./components/profile";
 import { redirect } from "next/navigation";
 
 import DeckGrid from "./components/DeckGrid";

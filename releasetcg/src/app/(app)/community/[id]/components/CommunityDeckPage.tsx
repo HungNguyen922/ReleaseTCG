@@ -51,17 +51,10 @@ export default function CommunityDeckPage({
     loadDeck();
   }, [deckId]);
 
-  const {
-    cardMap,
-    leaderCard,
-    mainDeckCards,
-    extraDeckCards,
-  } = useCommunityDeck(deck, cards);
+  const { cardMap, coverCard, mainDeckCards, extraDeckCards } =
+    useCommunityDeck(deck, cards);
 
-  const hoveredCard =
-    hoveredCardId
-      ? cardMap.get(hoveredCardId) ?? null
-      : null;
+  const hoveredCard = hoveredCardId ? cardMap.get(hoveredCardId) ?? null : null;
 
   const {
     handleSaveDescription,
@@ -101,7 +94,7 @@ export default function CommunityDeckPage({
           <CommunityDeckOverview
             deckTitle={deck.title}
             author={deck.author}
-            leader={leaderCard}
+            coverCard={coverCard}
             mainDeck={mainDeckCards}
             extraDeck={extraDeckCards}
             hoveredCard={hoveredCard}
