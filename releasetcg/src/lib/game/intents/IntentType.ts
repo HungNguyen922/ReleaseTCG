@@ -7,7 +7,6 @@ export enum IntentType {
     Liminal = "liminal",
 
     SetCard = "setCard",
-    DrawLeader = "drawLeader",
     Pass = "pass",
     EndTurn = "endTurn",
 }

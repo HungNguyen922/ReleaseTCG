@@ -2,13 +2,14 @@ import { Deck } from "./decks";
 
 export type CommunityDeckRow = {
   id: string;
-
   owner_id: string;
 
   title: string;
   description: string;
 
   deck: Deck;
+
+  cover_card_id: string | null; 
 
   is_public: boolean;
 
@@ -23,6 +24,10 @@ export type CommunityDeckSummary = {
   description: string;
 
   author: string;
+
+  coverCardId: string | null;
+  coverCardNumber: string | null;
+  coverSetName: string | null;
 
   likes: number;
   comments: number;
@@ -41,6 +46,10 @@ export type CommunityDeck = {
   author: string;
   ownerId: string;
 
+  coverCardId: string | null;
+  coverCardNumber: string | null;
+  coverSetName: string | null;
+
   likes: number;
   comments: number;
 
@@ -48,7 +57,4 @@ export type CommunityDeck = {
   updatedAt: string;
 };
 
-export type CommunityFilter =
-  | "newest"
-  | "popular"
-  | "mine";
+export type CommunityFilter = "newest" | "popular" | "mine";

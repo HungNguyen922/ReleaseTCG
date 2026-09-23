@@ -23,7 +23,6 @@ export * from "./CardColor";
 export * from "./CardDefinition";
 export * from "./CardTraitDefinition";
 export * from "./CardDefinition";
-export * from "./LeaderDefinition";
 export * from "./CardInstance";
 export * from "./LocationType";
 export * from "./PureUnit";
