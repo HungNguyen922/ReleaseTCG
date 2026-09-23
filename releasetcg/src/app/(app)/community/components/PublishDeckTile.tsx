@@ -17,25 +17,20 @@ export default function PublishDeckTile({
   deck,
   onSelect,
 }: Props) {
-  const hasCover = deck.coverCardNumber && deck.coverSetName;
-
   return (
     <div className="flex items-center gap-4 rounded-lg border p-3">
 
       <div className="relative h-20 w-32 overflow-hidden rounded-md bg-muted">
-        {hasCover ? (
+        {deck.leaderImage ? (
           <Image
             fill
-            src={getCardImageUrl({
-              cardNumber: deck.coverCardNumber,
-              setName: deck.coverSetName,
-            })}
-            alt={deck.name}
+            src={getCardImageUrl(deck.leaderImage)}
+            alt={deck.leaderName ?? deck.name}
             className="object-cover"
           />
         ) : (
           <div className="flex h-full items-center justify-center text-xs text-muted-foreground">
-            No Cover
+            No Leader
           </div>
         )}
       </div>
@@ -44,6 +39,10 @@ export default function PublishDeckTile({
         <h3 className="font-semibold">
           {deck.name}
         </h3>
+
+        <p className="text-sm text-muted-foreground">
+          {deck.leaderName ?? "No Leader"}
+        </p>
       </div>
 
       <Button
