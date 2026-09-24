@@ -11,6 +11,10 @@ import {
     CardReference,
 } from "@/lib/game/refs";
 
+import {
+    CardOrderingResponse,
+} from "@/lib/game/ordering/models";
+
 export function processPendingInteraction(
 
     interaction: PendingInteraction,
@@ -49,7 +53,7 @@ export function processPendingInteraction(
 
             interaction.resolve(
 
-                response as CardReference[],
+                response as CardOrderingResponse,
 
             );
 

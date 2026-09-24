@@ -50,40 +50,24 @@ export function insertCard(
             return;
         }
 
-
         case LocationType.Set: {
-
-            const setZone = findSetZone(
-                context,
-                destination,
-            );
+            const setZone = findSetZone(context, destination);
 
             if (!setZone) {
-                throw new Error(
-                    "insertCard: destination set zone not found.",
-                );
+                throw new Error("insertCard: destination set zone not found.");
             }
 
             if (!setZone.stack) {
-                throw new Error(
-                    "insertCard: set zone has no stack.",
-                );
+                setZone.stack = { cards: [] };
             }
 
             if (setZone.stack.cards.length > 0) {
-                throw new Error(
-                    "insertCard: set zone already occupied.",
-                );
+                throw new Error("insertCard: set zone already occupied.");
             }
 
-            setZone.stack.cards.unshift(
-                card,
-            );
-
+            setZone.stack.cards.unshift(card);
             return;
-
         }
-
 
         case LocationType.Pile: {
 

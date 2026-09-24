@@ -15,10 +15,8 @@ export function createPlayer(
         id: player.id,
 
         health: 10,
-
-        leader: player.leader,
-
-        leaderDrawn: false,
+        
+        passesRemaining: 1,
 
     };
 

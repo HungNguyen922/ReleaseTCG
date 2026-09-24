@@ -119,6 +119,7 @@ export function compileSet(
         //
 
         if (
+            setZone.stack &&
             setZone.stack.cards.length > 0
         ) {
             return failure(

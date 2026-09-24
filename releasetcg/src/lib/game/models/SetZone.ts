@@ -1,9 +1,9 @@
 import { BoardPosition } from "./BoardPosition";
-import { PileState } from "./PileState";
 import { PlayerSide } from "./PlayerSide";
+import { GateStack } from "./GateStack";
 
 export interface SetZone {
     side: PlayerSide;
     position: BoardPosition;
-    stack: PileState;
+    stack: GateStack | null;
 }

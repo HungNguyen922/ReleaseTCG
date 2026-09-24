@@ -4,8 +4,8 @@ import {
     PlayerSide,
 } from "../models";
 
-export function createBoard(): BoardState {
-    const gateZones = [
+function createZones() {
+    return [
         PlayerSide.Top,
         PlayerSide.Bottom,
     ].flatMap((side) =>
@@ -19,24 +19,11 @@ export function createBoard(): BoardState {
             stack: null,
         }))
     );
+}
 
-    const setZones = [
-        PlayerSide.Top,
-        PlayerSide.Bottom,
-    ].flatMap((side) =>
-        [
-            BoardPosition.Left,
-            BoardPosition.Center,
-            BoardPosition.Right,
-        ].map((position) => ({
-            side,
-            position,
-            card: null,
-        }))
-    );
-
+export function createBoard(): BoardState {
     return {
-        gateZones,
-        setZones,
+        gateZones: createZones(),
+        setZones: createZones(),
     };
 }

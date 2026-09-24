@@ -18,9 +18,9 @@ export default function CardInspector({ card }: Props) {
 
       {/* LEFT: IMAGE */}
       <div className="w-[72px] flex-shrink-0">
-        {card.image_url && (
+        {card.cardNumber && card.setName && (
             <Image
-                src={getCardImageUrl(card.image_url)}
+                src={getCardImageUrl(card)}
                 alt={card.name}
                 width={180}
                 height={252}

@@ -20,7 +20,7 @@ export async function updateDeck({
     .from("decks")
     .update({
       name,
-      leader_id: deck.leader,
+      cover_card_id: deck.coverCardId,
       main_deck: deck.mainDeck,
       extra_deck: deck.extraDeck,
     })

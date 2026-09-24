@@ -30,7 +30,7 @@ export async function initializeEngine(
 
             catch (error) {
                 throw new Error(
-                    `Failed to parse card "${row.name}" (${row.id}).`,
+                    `Failed to parse card "${row.Name}" (${row.id}).`,
                 );
             }
         },

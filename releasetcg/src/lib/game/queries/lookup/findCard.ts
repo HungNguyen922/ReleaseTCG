@@ -72,16 +72,16 @@ export function findCard(
 
     for (const zone of context.state.board.setZones) {
 
-        if (!zone.card) {
+        if (!zone.stack || zone.stack.cards.length === 0) {
             continue;
         }
 
-        if (zone.card.id !== reference.id) {
+        if (zone.stack.cards[0].id !== reference.id) {
             continue;
         }
 
         return {
-            card: zone.card,
+            card: zone.stack.cards[0],
             reference,
             location: {
                 locationType: LocationType.Set,
