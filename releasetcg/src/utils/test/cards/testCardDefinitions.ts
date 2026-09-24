@@ -12,6 +12,8 @@ export const TEST_CARD_DEFINITIONS: CardDefinition[] = [
         colors: [],
         trait: null,
         abilities: [],
+        cardNumber: null,
+        setName: null,
     },
 
     {
@@ -22,6 +24,8 @@ export const TEST_CARD_DEFINITIONS: CardDefinition[] = [
         colors: [],
         trait: null,
         abilities: [],
+        cardNumber: null,
+        setName: null,
     },
 
     {
@@ -32,6 +36,8 @@ export const TEST_CARD_DEFINITIONS: CardDefinition[] = [
         colors: [],
         trait: null,
         abilities: [],
+        cardNumber: null,
+        setName: null,
     },
 
     {
@@ -42,6 +48,8 @@ export const TEST_CARD_DEFINITIONS: CardDefinition[] = [
         colors: [],
         trait: null,
         abilities: [],
+        cardNumber: null,
+        setName: null,
     },
 
     {
@@ -52,6 +60,8 @@ export const TEST_CARD_DEFINITIONS: CardDefinition[] = [
         colors: [],
         trait: null,
         abilities: [],
+        cardNumber: null,
+        setName: null,
     },
 
     {
@@ -62,6 +72,8 @@ export const TEST_CARD_DEFINITIONS: CardDefinition[] = [
         colors: [],
         trait: null,
         abilities: [],
+        cardNumber: null,
+        setName: null,
     },
 
     {
@@ -72,6 +84,8 @@ export const TEST_CARD_DEFINITIONS: CardDefinition[] = [
         colors: [],
         trait: null,
         abilities: [],
+        cardNumber: null,
+        setName: null,
     },
 
     {
@@ -82,6 +96,8 @@ export const TEST_CARD_DEFINITIONS: CardDefinition[] = [
         colors: [],
         trait: null,
         abilities: [],
+        cardNumber: null,
+        setName: null,
     },
 
     {
@@ -92,6 +108,8 @@ export const TEST_CARD_DEFINITIONS: CardDefinition[] = [
         colors: [],
         trait: null,
         abilities: [],
+        cardNumber: null,
+        setName: null,
     },
 
     {
@@ -102,6 +120,8 @@ export const TEST_CARD_DEFINITIONS: CardDefinition[] = [
         colors: [],
         trait: null,
         abilities: [],
+        cardNumber: null,
+        setName: null,
     },
 
     {
@@ -112,6 +132,8 @@ export const TEST_CARD_DEFINITIONS: CardDefinition[] = [
         colors: [],
         trait: null,
         abilities: [],
+        cardNumber: null,
+        setName: null,
     },
 
 ];
