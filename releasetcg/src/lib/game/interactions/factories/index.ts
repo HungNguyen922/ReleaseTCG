@@ -1,5 +1,4 @@
 export * from "./createPendingBooleanChoice";
-export * from "./createPendingCardOrdering";
 export * from "./createPendingCardSelection";
 export * from "./createPendingTargetSelection";
 

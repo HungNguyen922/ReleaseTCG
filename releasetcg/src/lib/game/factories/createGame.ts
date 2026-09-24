@@ -6,29 +6,18 @@ import {
     CreateGameOptions,
 } from "../models/GameOptions";
 
-import {
-    createBoard,
-} from "./createBoard";
 
 import {
-    createPlayer,
-} from "./createPlayer";
+    createSharedPiles, createPriorityState, createPlayerPiles, createPlayer, createBoard,
+} from "./index";
 
 import {
-    createPlayerPiles,
-} from "./createPlayerPiles";
 
-import {
-    createSharedPiles,
-} from "./createSharedPiles";
-
-import {
-    createPriorityState,
 } from "./createPriorityState";
 
 import {
     createTurnState,
-} from "./createTurnState";
+} from "../turn";
 
 export function createGame(
     options: CreateGameOptions,
