@@ -3,17 +3,22 @@
 import { DragEvent } from "react";
 
 import { useGame } from "../../providers/GameProvider";
-import { useGameRevision } from "../../hooks/useGameRevision";
 
 import GameCard from "../cards/GameCard";
 
 import { BOARD } from "@/game-ui/constants/boardMetrics";
 
-import { PlayerSide } from "@/lib/game/models";
+import {
+    BoardPosition,
+    LocationType,
+    PlayerSide,
+    PlayType,
+} from "@/lib/game/models";
+
+import { SetZoneReference } from "@/lib/game/refs";
+
 import { toPlayableCardFromInstance } from "@/game-ui/utils/toPlayableCardFromInstance";
 
-import { LocationType, BoardPosition } from "@/lib/game/models";
-import { SetZoneReference } from "@/lib/game/refs";
 import { locationRefsEqual } from "../../providers/GameProvider";
 
 interface Props {
@@ -26,20 +31,24 @@ export default function SetZone({
     opponent = false,
 }: Props) {
 
-     const { engine, selectedDestinations, toggleDestination } = useGame();
-
-    const revision =
-        useGameRevision();
-
-    console.log(
-        "SET ZONE RENDER REVISION:",
-        revision,
-    );
+    const {
+        engine,
+        selectedDestinations,
+        toggleDestination,
+        playCards,
+    } = useGame();
 
     const side =
         opponent
             ? PlayerSide.Top
             : PlayerSide.Bottom;
+
+    const setZone =
+        engine.state.board.setZones.find(
+            zone =>
+                zone.side === side &&
+                zone.position === index,
+        );
 
     const setRef: SetZoneReference = {
         locationType: LocationType.Set,
@@ -55,23 +64,8 @@ export default function SetZone({
         toggleDestination(setRef);
     }
 
-    const setZone =
-        engine.state.board.setZones.find(
-            zone =>
-                zone.side === side &&
-                zone.position === index,
-        );
-
     const topCard =
         setZone?.stack?.cards[0];
-
-    console.log(
-        "SET ZONE:",
-        side,
-        index,
-        setZone,
-        topCard,
-    );
 
     const cardDefinition =
         topCard
@@ -101,36 +95,20 @@ export default function SetZone({
             return;
         }
 
-        const card =
-            engine.card(cardId);
-
-        if (!card) {
-            return;
-        }
-
-        console.log(
-            "SET DROP:",
-            card.id,
-        );
-
-        engine.set(
-            card,
-            side,
-            index,
-        );
-
-        console.log(
-            "SET FINISHED",
+        playCards(
+            PlayType.Set,
+            [cardId],
+            [setRef],
         );
 
     }
 
     return (
         <div
-            onClick={handleClick}
             style={{
                 height: BOARD.setHeight,
             }}
+            onClick={handleClick}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
             className={`aspect-[5/5] overflow-hidden rounded-lg border bg-muted transition hover:bg-muted/80 cursor-pointer ${

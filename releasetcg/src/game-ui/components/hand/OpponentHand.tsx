@@ -23,6 +23,9 @@ export default function OpponentHand() {
     const {
         engine,
         revealP2,
+        selectedCardIds,
+        toggleCard,
+        activePlayerId,
     } = useGame();
 
     useGameRevision();
@@ -51,12 +54,21 @@ export default function OpponentHand() {
 
     );
 
+    const isActive =
+        activePlayerId === "P2";
+
     return (
 
         <HandFan
             cards={cards}
             hidden={!revealP2}
             position="top"
+            selectedCardIds={isActive ? selectedCardIds : []}
+            onCardClick={
+                isActive
+                    ? card => toggleCard(card.id)
+                    : undefined
+            }
         />
 
     );

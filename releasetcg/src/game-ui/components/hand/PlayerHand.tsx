@@ -20,6 +20,7 @@ export default function PlayerHand() {
         engine,
         selectedCardIds,
         toggleCard,
+        activePlayerId,
     } = useGame();
 
     useGameRevision();
@@ -41,13 +42,20 @@ export default function PlayerHand() {
 
             });
 
+    const isActive =
+        activePlayerId === "P1";
+
     return (
 
         <HandFan
             cards={cards}
             position="bottom"
-            selectedCardIds={selectedCardIds}
-            onCardClick={card => toggleCard(card.id)}
+            selectedCardIds={isActive ? selectedCardIds : []}
+            onCardClick={
+                isActive
+                    ? card => toggleCard(card.id)
+                    : undefined
+            }
         />
 
     );

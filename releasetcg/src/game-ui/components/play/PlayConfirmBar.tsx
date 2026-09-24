@@ -6,6 +6,8 @@ export default function PlayConfirmBar() {
 
     const {
         engine,
+        activePlayerId,
+        setActivePlayerId,
         activePlay,
         selectedCardIds,
         selectedDestinations,
@@ -17,6 +19,17 @@ export default function PlayConfirmBar() {
     return (
 
         <div className="flex flex-col gap-2 rounded-lg border bg-card p-3 shadow-md">
+
+            <button
+                onClick={() =>
+                    setActivePlayerId(
+                        activePlayerId === "P1" ? "P2" : "P1",
+                    )
+                }
+                className="self-start rounded-md border px-3 py-1.5 text-xs font-medium hover:bg-muted"
+            >
+                Acting as: {activePlayerId}
+            </button>
 
             <div className="text-xs text-muted-foreground">
                 {activePlay ?? "No play type selected"}
