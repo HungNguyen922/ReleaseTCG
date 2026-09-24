@@ -151,64 +151,34 @@ export class TestGame {
                     {
                         side: PlayerSide.Top,
                         position: 0,
-                        stack: {
-                            id: "SET_P2_0",
-                            pileType: PileType.Temporary,
-                            ownerId: "P2",
-                            cards: [],
-                        },
+                        stack: null,
                     },
                     {
                         side: PlayerSide.Top,
                         position: 1,
-                        stack: {
-                            id: "SET_P2_1",
-                            pileType: PileType.Temporary,
-                            ownerId: "P2",
-                            cards: [],
-                        },
+                        stack: null,
                     },
                     {
                         side: PlayerSide.Top,
                         position: 2,
-                        stack: {
-                            id: "SET_P2_2",
-                            pileType: PileType.Temporary,
-                            ownerId: "P2",
-                            cards: [],
-                        },
+                        stack: null,
                     },
                     {
                         side: PlayerSide.Bottom,
                         position: 0,
-                        stack: {
-                            id: "SET_P1_0",
-                            pileType: PileType.Temporary,
-                            ownerId: "P1",
-                            cards: [],
-                        },
+                        stack: null,
                     },
                     {
                         side: PlayerSide.Bottom,
                         position: 1,
-                        stack: {
-                            id: "SET_P1_1",
-                            pileType: PileType.Temporary,
-                            ownerId: "P1",
-                            cards: [],
-                        },
+                        stack: null,
                     },
                     {
                         side: PlayerSide.Bottom,
                         position: 2,
-                        stack: {
-                            id: "SET_P1_2",
-                            pileType: PileType.Temporary,
-                            ownerId: "P1",
-                            cards: [],
-                        },
+                        stack: null,
                     },
-                ]
+                ],
 
             },
 
