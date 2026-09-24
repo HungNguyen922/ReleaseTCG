@@ -2,6 +2,9 @@ import { CardDefinition } from "@/lib/game/models";
 
 import { DeckExport, DeckEntry } from "@/types/decks";
 
+const MAIN_DECK_SIZE = 15;
+const EXTRA_DECK_SIZE = 5;
+
 export function buildPlaceholderDeck(
     cardDefinitions: CardDefinition[],
 ): DeckExport {
@@ -19,23 +22,33 @@ export function buildPlaceholderDeck(
 
     for (const card of shuffled) {
 
-        if (mainCount < 20) {
+        if (mainCount < MAIN_DECK_SIZE) {
+
+            const count = Math.min(
+                2,
+                MAIN_DECK_SIZE - mainCount,
+            );
 
             mainDeck.push({
                 cardId: card.id,
-                count: 2,
+                count,
             });
 
-            mainCount += 2;
+            mainCount += count;
 
-        } else if (extraCount < 6) {
+        } else if (extraCount < EXTRA_DECK_SIZE) {
+
+            const count = Math.min(
+                2,
+                EXTRA_DECK_SIZE - extraCount,
+            );
 
             extraDeck.push({
                 cardId: card.id,
-                count: 2,
+                count,
             });
 
-            extraCount += 2;
+            extraCount += count;
 
         } else {
             break;
@@ -43,6 +56,10 @@ export function buildPlaceholderDeck(
 
     }
 
-    return { mainDeck, extraDeck };
+    return {
+        coverCardId: null,
+        mainDeck,
+        extraDeck,
+    };
 
 }
