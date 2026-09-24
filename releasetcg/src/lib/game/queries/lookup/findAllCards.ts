@@ -113,17 +113,17 @@ export function findAllCards(
 
     for (const zone of context.state.board.setZones) {
 
-        if (!zone.card) {
+        if (!zone.stack || zone.stack.cards.length === 0) {
             continue;
         }
 
         cards.push({
 
-            card: zone.card,
+            card: zone.stack.cards[0],
 
             reference: {
 
-                id: zone.card.id,
+                id: zone.stack.cards[0].id,
 
             },
 
