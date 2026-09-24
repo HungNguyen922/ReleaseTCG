@@ -40,6 +40,9 @@ import {
     processAction,
 } from "@/lib/game/processors/processAction";
 
+import { createPassAction } from "@/lib/game/actions/PassAction";
+import { createEndTurnCommand } from "@/lib/game/commands";
+
 import {
     clearEventListeners,
 } from "@/lib/game/events/listeners/EventListenerRegistry";
@@ -872,6 +875,40 @@ export class TestGame {
         );
 
     }
+
+    public pass(
+        playerId = this.state.turn.currentPlayerId,
+    ): void {
+
+        processAction(
+            this.context,
+            createPassAction({ id: playerId }),
+        );
+
+        processEngine(
+            this.context,
+        );
+
+        this.notify();
+
+    }
+
+    public endTurn(
+        playerId = this.state.turn.currentPlayerId,
+    ): void {
+
+        this.context.commandQueue.push(
+            createEndTurnCommand({ id: playerId }),
+        );
+
+        processEngine(
+            this.context,
+        );
+
+        this.notify();
+
+    }
+
     public card(
         cardId: string,
     ): CardInstance | null {

@@ -12,6 +12,10 @@ import { BOARD } from "@/game-ui/constants/boardMetrics";
 import { PlayerSide } from "@/lib/game/models";
 import { toPlayableCardFromInstance } from "@/game-ui/utils/toPlayableCardFromInstance";
 
+import { LocationType, BoardPosition } from "@/lib/game/models";
+import { SetZoneReference } from "@/lib/game/refs";
+import { locationRefsEqual } from "../../providers/GameProvider";
+
 interface Props {
     index: number;
     opponent?: boolean;
@@ -22,7 +26,7 @@ export default function SetZone({
     opponent = false,
 }: Props) {
 
-    const { engine } = useGame();
+     const { engine, selectedDestinations, toggleDestination } = useGame();
 
     const revision =
         useGameRevision();
@@ -36,6 +40,20 @@ export default function SetZone({
         opponent
             ? PlayerSide.Top
             : PlayerSide.Bottom;
+
+    const setRef: SetZoneReference = {
+        locationType: LocationType.Set,
+        side,
+        position: index as BoardPosition,
+    };
+
+    const isSelected = selectedDestinations.some(
+        ref => locationRefsEqual(ref, setRef),
+    );
+
+    function handleClick() {
+        toggleDestination(setRef);
+    }
 
     const setZone =
         engine.state.board.setZones.find(
@@ -109,12 +127,15 @@ export default function SetZone({
 
     return (
         <div
+            onClick={handleClick}
             style={{
                 height: BOARD.setHeight,
             }}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
-            className="aspect-[5/5] overflow-hidden rounded-lg border bg-muted transition hover:bg-muted/80"
+            className={`aspect-[5/5] overflow-hidden rounded-lg border bg-muted transition hover:bg-muted/80 cursor-pointer ${
+                isSelected ? "ring-4 ring-primary" : ""
+            }`}
         >
             {cardDefinition ? (
                 <GameCard

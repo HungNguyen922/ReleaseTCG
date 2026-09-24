@@ -8,6 +8,7 @@ import {
 import {
     processBurnAction, processConstructAction, processChainAction, processBoundAction, processSplitAction, processLiminalAction,
     processSetAction,
+    processPassAction,
 } from "./plays";
 
 
@@ -79,6 +80,10 @@ export function processAction(
                 action,
             );
 
+            return;
+        
+        case ActionType.Pass:
+            processPassAction(context, action);
             return;
             
         default:

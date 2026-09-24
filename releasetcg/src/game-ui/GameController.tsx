@@ -9,10 +9,12 @@ import GameBoard from "./components/board/GameBoard";
 import TurnInfo from "./components/board/TurnInfo";
 import PhaseAdvanceButton from "./components/board/PhaseAdvanceButton";
 
-
 import OpponentHand from "./components/hand/OpponentHand";
 import PlayerHand from "./components/hand/PlayerHand";
 import DebugRevealToggle from "./components/debug/DebugRevealToggle";
+
+import PlayTypeSelector from "./components/play/PlayTypeSelector";
+import PlayConfirmBar from "./components/play/PlayConfirmBar";
 
 import { CardDefinition } from "@/lib/game/models";
 
@@ -38,7 +40,7 @@ export default function GameController(
     }
 
     return (
-        
+
         <GameProvider engine={engine}>
 
             <div className="relative h-full w-full overflow-hidden bg-background">
@@ -54,6 +56,11 @@ export default function GameController(
                 <PhaseAdvanceButton />
 
                 <DebugRevealToggle />
+
+                <div className="absolute right-4 top-4 flex flex-col items-end gap-2">
+                    <PlayTypeSelector />
+                    <PlayConfirmBar />
+                </div>
 
             </div>
 

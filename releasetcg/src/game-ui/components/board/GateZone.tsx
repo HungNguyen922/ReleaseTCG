@@ -20,6 +20,10 @@ import {
     PlayerSide,
 } from "@/lib/game/models";
 
+import { LocationType } from "@/lib/game/models";
+import { GateReference } from "@/lib/game/refs";
+import { locationRefsEqual } from "../../providers/GameProvider";
+
 interface Props {
 
     row: number;
@@ -37,7 +41,7 @@ export default function GateZone({
 }: Props) {
 
     const {
-        engine, revision
+        engine, revision, selectedDestinations, toggleDestination,
     } = useGame();
 
     console.log("revision", revision);
@@ -53,6 +57,20 @@ export default function GateZone({
                 gate.side === side &&
                 gate.position === column,
         );
+
+    const gateRef: GateReference = {
+        locationType: LocationType.Gate,
+        side,
+        position: column as never, // BoardPosition is 0|1|2, matches column
+    };
+
+    const isSelected = selectedDestinations.some(
+        ref => locationRefsEqual(ref, gateRef),
+    );
+
+    function handleClick() {
+        toggleDestination(gateRef);
+    }
 
     const topCard =
         gate?.stack?.cards[0];
@@ -149,15 +167,12 @@ export default function GateZone({
     return (
 
         <div
-            onDragOver={
-                handleDragOver
-            }
-
-            onDrop={
-                handleDrop
-            }
-
-            className="h-[25vh] aspect-[5/7] overflow-hidden rounded-xl border bg-muted transition hover:bg-muted/80"
+            onClick={handleClick}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+            className={`h-[25vh] aspect-[5/7] overflow-hidden rounded-xl border bg-muted transition hover:bg-muted/80 cursor-pointer ${
+                isSelected ? "ring-4 ring-primary" : ""
+            }`}
         >
 
             {

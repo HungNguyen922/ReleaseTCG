@@ -18,15 +18,11 @@ export default function PlayerHand() {
 
     const {
         engine,
+        selectedCardIds,
+        toggleCard,
     } = useGame();
 
-    const revision =
-        useGameRevision();
-
-    console.log(
-        "PLAYER HAND REVISION:",
-        revision,
-    );
+    useGameRevision();
 
     const cards =
         engine
@@ -45,16 +41,13 @@ export default function PlayerHand() {
 
             });
 
-    console.log(
-        "ENGINE HAND:",
-        cards.map(card => card.id),
-    );
-
     return (
 
         <HandFan
             cards={cards}
             position="bottom"
+            selectedCardIds={selectedCardIds}
+            onCardClick={card => toggleCard(card.id)}
         />
 
     );

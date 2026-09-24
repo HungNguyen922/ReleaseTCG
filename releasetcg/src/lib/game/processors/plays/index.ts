@@ -5,3 +5,4 @@ export * from "./processBoundAction";
 export * from "./processSplitAction";
 export * from "./processLiminalAction";
 export * from "./processSetAction";
+export * from "./processPassAction";
