@@ -21,3 +21,6 @@ export function getCardImageUrl(card: ImageSourceCard) {
   const fileName = buildCardImageFilename(card);
   return `${SUPABASE_PROJECT_URL}/storage/v1/object/public/${BUCKET}/${fileName}`;
 }
+
+export const CARD_BACK_IMAGE_URL =
+  `${SUPABASE_PROJECT_URL}/storage/v1/object/public/${BUCKET}/ReleaseTCGCardBack.png`;

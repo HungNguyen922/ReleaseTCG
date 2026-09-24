@@ -23,12 +23,9 @@ export default function OpponentHand() {
     const {
         engine,
         revealP2,
-        selectedCardIds,
-        toggleCard,
-        activePlayerId,
     } = useGame();
 
-    useGameRevision();
+    const revision = useGameRevision();
 
     const cards = useMemo(
 
@@ -50,12 +47,9 @@ export default function OpponentHand() {
 
                 }),
 
-        [engine, revealP2],
+        [engine, revealP2, revision],
 
     );
-
-    const isActive =
-        activePlayerId === "P2";
 
     return (
 
@@ -63,12 +57,6 @@ export default function OpponentHand() {
             cards={cards}
             hidden={!revealP2}
             position="top"
-            selectedCardIds={isActive ? selectedCardIds : []}
-            onCardClick={
-                isActive
-                    ? card => toggleCard(card.id)
-                    : undefined
-            }
         />
 
     );
