@@ -42,6 +42,7 @@ import {
 
 import { createPassAction } from "@/lib/game/actions/PassAction";
 import { createEndTurnCommand } from "@/lib/game/commands";
+import { createPublicPile } from "@/lib/game/utils";
 
 import {
     clearEventListeners,
@@ -354,6 +355,7 @@ export class TestGame {
 
         }
 
+        this.populatePublicPile();
     }
 
 
@@ -570,6 +572,20 @@ export class TestGame {
 
     }
 
+    private populatePublicPile(): void {
+
+        const p1Remaining = this.getPile(PileType.MainDeck, "P1").cards.splice(0);
+        const p2Remaining = this.getPile(PileType.MainDeck, "P2").cards.splice(0);
+
+        const publicPile = this.getPile(PileType.PublicPile);
+
+        publicPile.cards = createPublicPile(
+            p1Remaining,
+            p2Remaining,
+        );
+
+    }
+    
     public reference(
         card: CardInstance,
     ) {
