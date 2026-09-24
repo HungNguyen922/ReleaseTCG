@@ -1,10 +1,7 @@
 import {
     PendingCardOrdering,
-} from "@/lib/game/targeting";
-
-import {
     PendingInteractionType,
-} from "@/lib/game/targeting";
+} from "@/lib/game/interactions";
 
 import {
     CardOrderingRequest,
