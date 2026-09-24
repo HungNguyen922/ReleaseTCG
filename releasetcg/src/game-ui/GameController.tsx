@@ -58,8 +58,8 @@ export default function GameController(
                 <DebugRevealToggle />
 
                 <div className="absolute bottom-24 left-4 z-50 flex flex-col items-start gap-2">
-                    <PlayTypeSelector />
                     <PlayConfirmBar />
+                    <PlayTypeSelector />
                 </div>
 
             </div>

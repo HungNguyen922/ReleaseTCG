@@ -51,7 +51,7 @@ import {
     registerDefaultEventListeners,
 } from "@/lib/game/events/listeners/registerDefaultEventListeners";
 
-import { processEngine } from "@/lib/game/engine/processEngine";
+import { processEngine } from "@/lib/game/processors/processEngine";
 
 import type {
     DeckExport,
