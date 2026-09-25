@@ -4,7 +4,15 @@ import { PassAction } from "../../actions/PassAction";
 
 import { findPlayer } from "../../queries";
 
-import { markActionTaken } from "@/lib/game/turn";
+import {
+    createBeginPhaseCommand,
+} from "../../commands/BeginPhaseCommand";
+
+import {
+    markActionTaken,
+} from "@/lib/game/turn";
+
+import { TurnPhase } from "../../models";
 
 export function processPassAction(
     context: EngineContext,
@@ -27,6 +35,16 @@ export function processPassAction(
             "No passes remaining.",
         );
     }
+
+    context.commandQueue.push(
+        
+        createBeginPhaseCommand(
+
+            TurnPhase.Fill,
+
+        ),
+
+    );
 
     player.passesRemaining -= 1;
 
