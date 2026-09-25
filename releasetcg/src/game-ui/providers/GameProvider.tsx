@@ -174,6 +174,7 @@ export function GameProvider({
             engine.play(intent);
             clearSelection();
         } catch (err) {
+            console.error("playCards failed:", err); // ← add this
             setPlayError((err as Error).message);
         }
 

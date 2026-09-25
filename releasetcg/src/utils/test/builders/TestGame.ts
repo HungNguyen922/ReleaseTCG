@@ -585,7 +585,7 @@ export class TestGame {
         );
 
     }
-    
+
     public reference(
         card: CardInstance,
     ) {
@@ -665,52 +665,22 @@ export class TestGame {
 
     }
 
-    public play(
-        intent: PlayIntent,
-    ): void {
+    public play(intent: PlayIntent): void {
 
-        const result =
-
-            this.compilePlay(
-                intent,
-            );
+        const result = this.compilePlay(intent);
 
         if (!result.success) {
-
-            throw new Error(
-
-                result.errors.join("\n") ||
-
-                "Play failed.",
-
-            );
-
+            throw new Error(result.errors.join("\n") || "Play failed.");
         }
 
-        for (
-
-            const action of result.actions
-
-        ) {
-
-            processAction(
-
-                this.context,
-
-                action,
-
-            );
-
+        try {
+            for (const action of result.actions) {
+                processAction(this.context, action);
+            }
+            processEngine(this.context);
+        } finally {
+            this.notify();
         }
-
-        processEngine(
-
-            this.context,
-
-        );
-
-        this.notify();
-
     }
 
     public cardDefinition(
