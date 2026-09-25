@@ -171,6 +171,7 @@ export function GameProvider({
         };
 
         try {
+            console.log("ENGINE USED BY playCards:", engine.debugId);
             engine.play(intent);
             console.log("P1 HAND AFTER PLAY:", engine.hand("P1").map(c => c.id));
             clearSelection();

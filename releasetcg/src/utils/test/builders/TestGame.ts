@@ -77,6 +77,8 @@ export class TestGame {
 
     public readonly player2: PlayerState;
 
+    public readonly debugId: String;
+
     constructor(
         options: {
             cardDefinitions?: Record<string, CardDefinition>;
@@ -84,6 +86,8 @@ export class TestGame {
             player2Deck?: DeckExport;
         } = {},
     ) {
+        
+        this.debugId = Math.random().toString(36).slice(2, 8);
 
         clearEventListeners();
         registerDefaultEventListeners();
