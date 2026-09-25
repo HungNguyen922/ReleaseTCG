@@ -83,53 +83,20 @@ export const fillPhaseEventListener: EventListener<PhaseStartedEvent> = {
                 targetHandSize - currentHandSize,
             );
 
-        if (fillCount > 0) {
+        const millBonus =
+            context.state.turn.cardsPlayedThisTurn >= 3 ? 1 : 0;
 
+        if (fillCount + millBonus > 0) {
             context.commandQueue.push(
-
                 createDrawCardsCommand(
-
                     player,
-
-                    fillCount,
-
-                    {
-                        locationType: LocationType.Pile,
-                        pileType: PileType.PublicPile,
-                        playerId,
-                    },
-
-                ),
-
-            );
-
-        }
-
-        //
-        // Mill: if 3+ cards played this turn,
-        // draw 1 additional from the Public Pile.
-        //
-        
-        console.log("MILL CHECK:", context.state.turn.cardsPlayedThisTurn);
-        if (context.state.turn.cardsPlayedThisTurn >= 3) {
-
-            context.commandQueue.push(
-
-                createDrawCardsCommand(
-
-                    player,
-
-                    1,
-
+                    fillCount + millBonus,
                     {
                         locationType: LocationType.Pile,
                         pileType: PileType.PublicPile,
                     },
-
                 ),
-
             );
-
         }
 
         //

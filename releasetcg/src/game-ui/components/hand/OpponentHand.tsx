@@ -40,6 +40,8 @@ export default function OpponentHand() {
         [engine, revision, revealP2],
     );
 
+    console.log("OPPHAND COMPUTED:", cards.map(c => c.id));
+
     const isActive =
         activePlayerId === "P2";
 
