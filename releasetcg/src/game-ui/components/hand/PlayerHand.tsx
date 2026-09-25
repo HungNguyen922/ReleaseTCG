@@ -25,6 +25,8 @@ export default function PlayerHand() {
         return toPlayableCardFromInstance(card, definition);
     });
 
+    console.log("PLAYERHAND CARDS:", cards.map(c => c.id));
+
     const isActive = activePlayerId === "P1";
 
     return (

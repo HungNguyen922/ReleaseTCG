@@ -5,40 +5,19 @@ import {
     EventType,
 } from ".";
 
-import { processCardMovedEvent } from "../processors/events";
-
 import { getEventListeners } from "./listeners/EventListenerRegistry";
 
 export function processEvent(
     context: EngineContext,
     event: EngineEvent,
 ): void {
-
-    switch (event.type) {
-
-        case EventType.CardMoved:
-            processCardMovedEvent(
-                context,
-                event,
-            );
-            break;
-
-        default:
-            break;
-
+    if (event.type === EventType.CardMoved) {
+        // whatever processCardMovedEvent uniquely does beyond the listener loop, if anything
     }
 
     for (const listener of getEventListeners()) {
-
         if (listener.accepts(event)) {
-
-            listener.execute(
-                context,
-                event,
-            );
-
+            listener.execute(context, event);
         }
-
     }
-
 }
