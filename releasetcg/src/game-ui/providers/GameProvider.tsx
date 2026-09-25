@@ -172,6 +172,7 @@ export function GameProvider({
 
         try {
             engine.play(intent);
+            console.log("P1 HAND AFTER PLAY:", engine.hand("P1").map(c => c.id));
             clearSelection();
         } catch (err) {
             console.error("playCards failed:", err); // ← add this

@@ -30,28 +30,14 @@ export default function OpponentHand() {
 
     useGameRevision();
 
+    const revision = useGameRevision();
+
     const cards = useMemo(
-
-        () =>
-
-            engine
-                .hand("P2")
-                .map(card => {
-
-                    const definition =
-                        engine.cardDefinition(
-                            card,
-                        );
-
-                    return toPlayableCardFromInstance(
-                        card,
-                        definition,
-                    );
-
-                }),
-
-        [engine, revealP2],
-
+        () => engine.hand("P2").map(card => {
+            const definition = engine.cardDefinition(card);
+            return toPlayableCardFromInstance(card, definition);
+        }),
+        [engine, revision, revealP2],
     );
 
     const isActive =
