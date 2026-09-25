@@ -7,7 +7,7 @@ import {
 } from "@/lib/game/models";
 
 import {
-    processInstantPhase, processActionPhase, processFillPhase, processEndPhase
+    processInstantPhase, processEndPhase
 } from "./phases";
 
 export function processTurnPhase(
@@ -25,26 +25,6 @@ export function processTurnPhase(
         case TurnPhase.Instant:
 
             processInstantPhase(
-
-                context,
-
-            );
-
-            return;
-
-        case TurnPhase.Action:
-
-            processActionPhase(
-
-                context,
-
-            );
-
-            return;
-
-        case TurnPhase.Fill:
-
-            processFillPhase(
 
                 context,
 
