@@ -25,22 +25,12 @@ export default function PlayerHand() {
 
     useGameRevision();
 
-    const cards =
-        engine
-            .hand("P1")
-            .map(card => {
+    const cards = engine.hand("P1").map(card => {
+        const definition = engine.cardDefinition(card);
+        return toPlayableCardFromInstance(card, definition);
+    });
 
-                const definition =
-                    engine.cardDefinition(
-                        card,
-                    );
-
-                return toPlayableCardFromInstance(
-                    card,
-                    definition,
-                );
-
-            });
+    console.log("PLAYERHAND COMPUTED:", cards.map(c => c.id));
 
     const isActive =
         activePlayerId === "P1";
