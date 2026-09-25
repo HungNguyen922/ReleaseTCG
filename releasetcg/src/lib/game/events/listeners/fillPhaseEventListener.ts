@@ -95,7 +95,7 @@ export const fillPhaseEventListener: EventListener<PhaseStartedEvent> = {
 
                     {
                         locationType: LocationType.Pile,
-                        pileType: PileType.MainDeck,
+                        pileType: PileType.PublicPile,
                         playerId,
                     },
 
