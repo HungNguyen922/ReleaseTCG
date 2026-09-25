@@ -109,7 +109,8 @@ export const fillPhaseEventListener: EventListener<PhaseStartedEvent> = {
         // Mill: if 3+ cards played this turn,
         // draw 1 additional from the Public Pile.
         //
-
+        
+        console.log("MILL CHECK:", context.state.turn.cardsPlayedThisTurn);
         if (context.state.turn.cardsPlayedThisTurn >= 3) {
 
             context.commandQueue.push(

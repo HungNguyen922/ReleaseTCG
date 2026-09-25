@@ -666,18 +666,24 @@ export class TestGame {
     }
 
     public play(intent: PlayIntent): void {
-
         const result = this.compilePlay(intent);
 
         if (!result.success) {
             throw new Error(result.errors.join("\n") || "Play failed.");
         }
 
+        const stateSnapshot = structuredClone(this.state);
+        const queueSnapshot = [...this.context.commandQueue];
+
         try {
             for (const action of result.actions) {
                 processAction(this.context, action);
             }
             processEngine(this.context);
+        } catch (err) {
+            Object.assign(this.state, structuredClone(stateSnapshot));
+            this.context.commandQueue = queueSnapshot;
+            throw err;
         } finally {
             this.notify();
         }
