@@ -16,35 +16,23 @@ import {
 
 export default function PlayerHand() {
 
-    const {
-        engine,
-        selectedCardIds,
-        toggleCard,
-        activePlayerId,
-    } = useGame();
-
-    useGameRevision();
+    const { engine, selectedCardIds, toggleCard, activePlayerId } = useGame();
+    const revision = useGameRevision();
 
     const cards = engine.hand("P1").map(card => {
         const definition = engine.cardDefinition(card);
         return toPlayableCardFromInstance(card, definition);
     });
 
-    const isActive =
-        activePlayerId === "P1";
+    const isActive = activePlayerId === "P1";
 
     return (
-
         <HandFan
+            key={revision}
             cards={cards}
             position="bottom"
             selectedCardIds={isActive ? selectedCardIds : []}
-            onCardClick={
-                isActive
-                    ? card => toggleCard(card.id)
-                    : undefined
-            }
+            onCardClick={isActive ? card => toggleCard(card.id) : undefined}
         />
-
     );
 }
