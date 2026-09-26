@@ -13,6 +13,8 @@ import {
 
 import { createBurnAction } from "../../actions";
 
+import { isValidPlaySource } from "./isValidPlaySource";
+
 import {
     failure,
     success,
@@ -57,16 +59,13 @@ export function compileBurn(
     }
 
     //
-    // Card must come from the player's hand.
+    // card must come from player's hand
+    // or an occupied set zone
     //
 
-    if (
-        card.location.locationType !== LocationType.Pile ||
-        card.location.pileType !== PileType.Hand ||
-        card.location.playerId !== intent.player.id
-    ) {
+    if (!isValidPlaySource(context, card.location, intent.player.id)) {
         return failure(
-            "Card must be played from your hand.",
+            "Card must be played from your hand or an occupied Set Zone.",
         );
     }
 

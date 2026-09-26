@@ -44,6 +44,7 @@ export default function GateLane({
 
                     <SetZone
                         index={column}
+                        opponent
                     />
 
                 )

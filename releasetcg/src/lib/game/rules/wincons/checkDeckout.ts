@@ -1,17 +1,42 @@
-import {
-    EngineContext,
-} from "@/lib/game/EngineContext";
+import { EngineContext } from "@/lib/game/EngineContext";
+import { PileType, PlayerSide } from "@/lib/game/models";
 
-export function checkDeckout(
+function sideForPlayer(context: EngineContext, playerId: string): PlayerSide {
+    const index = context.state.players.findIndex(p => p.id === playerId);
+    return index === 0 ? PlayerSide.Bottom : PlayerSide.Top;
+}
 
-    context: EngineContext,
+export function checkDeckout(context: EngineContext): string | null {
 
-): string | null {
+    const publicPile = context.state.piles.find(
+        p => p.pileType === PileType.PublicPile,
+    );
 
-    //
-    // Deckout should only be checked
-    // after a failed draw.
-    //
+    if (!publicPile || publicPile.cards.length > 0) {
+        return null;
+    }
+
+    for (const player of context.state.players) {
+
+        const hand = context.state.piles.find(
+            p => p.pileType === PileType.Hand && p.ownerId === player.id,
+        );
+
+        if ((hand?.cards.length ?? 0) > 0) {
+            continue;
+        }
+
+        const side = sideForPlayer(context, player.id);
+
+        const hasSetCards = context.state.board.setZones
+            .filter(zone => zone.side === side)
+            .some(zone => zone.stack && zone.stack.cards.length > 0);
+
+        if (!hasSetCards) {
+            return player.id;
+        }
+
+    }
 
     return null;
 

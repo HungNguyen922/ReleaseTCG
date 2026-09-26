@@ -19,6 +19,8 @@ interface Props {
 
     position?: "top" | "bottom";
 
+    selectedCardIds?: string[];
+
     onCardClick?: (
         card: PlayableCard,
     ) => void;
@@ -40,6 +42,8 @@ export default function HandFan({
     hidden = false,
 
     position = "bottom",
+
+    selectedCardIds = [],
 
     onCardClick,
 
@@ -180,6 +184,12 @@ export default function HandFan({
                                         ? isTop
                                             ? "translate-y-[5vh] scale-120"
                                             : "-translate-y-[5vh] scale-120"
+                                        : ""
+                                }
+                                
+                                ${
+                                    selectedCardIds.includes(card.id)
+                                        ? "ring-4 ring-primary -translate-y-[3vh]"
                                         : ""
                                 }
 

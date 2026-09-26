@@ -4,7 +4,6 @@ import { PlayIntent } from "../../intents";
 
 import {
     LocationType,
-    PileType,
 } from "../../models";
 
 import {
@@ -27,6 +26,8 @@ import {
 import {
     createChainAction,
 } from "../../actions";
+
+import { isValidPlaySource } from "./isValidPlaySource";
 
 import {
     failure,
@@ -119,23 +120,10 @@ export function compileChain(
         // (Later this expands to Set Zones.)
         //
 
-        if (
-
-            location.location.locationType !==
-                LocationType.Pile ||
-
-            location.location.pileType !==
-                PileType.Hand ||
-
-            location.location.playerId !==
-                intent.player.id
-
-        ) {
-
+        if (!isValidPlaySource(context, location.location, intent.player.id)) {
             return failure(
-                "All Chain cards must come from your hand.",
+                "All Chain cards must come from your hand or an occupied Set Zone.",
             );
-
         }
 
         resolvedCards.push(

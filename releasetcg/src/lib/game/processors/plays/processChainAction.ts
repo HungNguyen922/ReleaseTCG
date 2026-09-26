@@ -10,7 +10,6 @@ import {
     createBeginPhaseCommand,
 } from "../../commands/BeginPhaseCommand";
 
-
 import {
     markActionTaken,
     incrementCardsPlayedThisTurn,

@@ -16,46 +16,26 @@ import {
 
 export default function PlayerHand() {
 
-    const {
-        engine,
-    } = useGame();
+    const { engine, selectedCardIds, toggleCard, activePlayerId } = useGame();
+    const revision = useGameRevision();
 
-    const revision =
-        useGameRevision();
+    console.log("ENGINE USED BY PlayerHand:", engine.debugId);
+    const cards = engine.hand("P1").map(card => {
+        const definition = engine.cardDefinition(card);
+        return toPlayableCardFromInstance(card, definition);
+    });
 
-    console.log(
-        "PLAYER HAND REVISION:",
-        revision,
-    );
+    console.log("PLAYERHAND CARDS:", cards.map(c => c.id));
 
-    const cards =
-        engine
-            .hand("P1")
-            .map(card => {
-
-                const definition =
-                    engine.cardDefinition(
-                        card,
-                    );
-
-                return toPlayableCardFromInstance(
-                    card,
-                    definition,
-                );
-
-            });
-
-    console.log(
-        "ENGINE HAND:",
-        cards.map(card => card.id),
-    );
+    const isActive = activePlayerId === "P1";
 
     return (
-
         <HandFan
+            key={revision}
             cards={cards}
             position="bottom"
+            selectedCardIds={isActive ? selectedCardIds : []}
+            onCardClick={isActive ? card => toggleCard(card.id) : undefined}
         />
-
     );
 }

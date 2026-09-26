@@ -17,8 +17,15 @@ import GameCard from "../cards/GameCard";
 import { toPlayableCardFromInstance } from "../../utils/toPlayableCardFromInstance";
 
 import {
+    BoardPosition,
+    LocationType,
     PlayerSide,
+    PlayType,
 } from "@/lib/game/models";
+
+import { GateReference } from "@/lib/game/refs";
+
+import { locationRefsEqual } from "../../providers/GameProvider";
 
 interface Props {
 
@@ -37,10 +44,12 @@ export default function GateZone({
 }: Props) {
 
     const {
-        engine, revision
+        engine,
+        revision,
+        selectedDestinations,
+        toggleDestination,
+        playCards,
     } = useGame();
-
-    console.log("revision", revision);
 
     const side =
         row === 0
@@ -54,6 +63,20 @@ export default function GateZone({
                 gate.position === column,
         );
 
+    const gateRef: GateReference = {
+        locationType: LocationType.Gate,
+        side,
+        position: column as BoardPosition,
+    };
+
+    const isSelected = selectedDestinations.some(
+        ref => locationRefsEqual(ref, gateRef),
+    );
+
+    function handleClick() {
+        toggleDestination(gateRef);
+    }
+
     const topCard =
         gate?.stack?.cards[0];
 
@@ -63,7 +86,7 @@ export default function GateZone({
                 topCard,
             )
             : undefined;
-    
+
     const playableCard =
         topCard && cardDefinition
             ? toPlayableCardFromInstance(
@@ -89,75 +112,35 @@ export default function GateZone({
 
         event.preventDefault();
 
-        console.log("1. DROP FIRED");
-
         const cardId =
             event.dataTransfer.getData(
                 "application/x-release-tcg-card",
             );
 
-        console.log(
-            "2. CARD ID:",
-            cardId,
-        );
-
         if (!cardId) {
             return;
         }
 
-        const card =
-            engine.card(cardId);
-
-        console.log(
-            "3. CARD:",
-            card,
+        // Goes through the same playCards() path as the play bar,
+        // so it respects "acting as" and surfaces errors instead
+        // of throwing.
+        playCards(
+            PlayType.Burn,
+            [cardId],
+            [gateRef],
         );
 
-        if (!card) {
-            return;
-        }
-
-        console.log(
-            "4. CALLING BURN",
-        );
-
-        engine.burn(
-            card,
-            side,
-            column,
-        );
-
-        console.log(
-            "5. BURN FINISHED",
-        );
-
-        console.log(
-            "DROPPING CARD",
-            card.id,
-            "ONTO",
-            side,
-            column,
-        );
     }
 
-    console.log(
-        "FULL STACK",
-        side,
-        column,
-        gate?.stack?.cards.map(c => c.id),
-    );
     return (
 
         <div
-            onDragOver={
-                handleDragOver
-            }
-
-            onDrop={
-                handleDrop
-            }
-
-            className="h-[25vh] aspect-[5/7] overflow-hidden rounded-xl border bg-muted transition hover:bg-muted/80"
+            onClick={handleClick}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+            className={`h-[25vh] aspect-[5/7] overflow-hidden rounded-xl border bg-muted transition hover:bg-muted/80 cursor-pointer ${
+                isSelected ? "ring-4 ring-primary" : ""
+            }`}
         >
 
             {

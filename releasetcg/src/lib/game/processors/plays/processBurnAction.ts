@@ -11,13 +11,15 @@ import {
 } from "../../commands/MoveCardCommand";
 
 import {
-    createBeginAttackCommand,
-} from "../../commands/BeginAttackCommand";
+    createBeginPhaseCommand,
+} from "../../commands/BeginPhaseCommand";
 
 import {
     markActionTaken,
     incrementCardsPlayedThisTurn,
 } from "@/lib/game/turn";
+
+import { TurnPhase } from "../../models";
 
 export function processBurnAction(
     context: EngineContext,
@@ -58,10 +60,10 @@ export function processBurnAction(
     }
 
     context.commandQueue.push(
+    
+        createBeginPhaseCommand(
 
-        createBeginAttackCommand(
-
-            { gate: action.gate },
+            TurnPhase.Fill,
 
         ),
 

@@ -8,7 +8,7 @@ import { createBeginPhaseCommand } from "@/lib/game/commands";
 
 import { processCommand } from "@/lib/game/processors/processCommand";
 
-import { processEngine } from "@/lib/game/engine/processEngine";
+import { processEngine } from "@/lib/game/processors/processEngine";
 
 import { TurnPhase } from "@/lib/game/models";
 

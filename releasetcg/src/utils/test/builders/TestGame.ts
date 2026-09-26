@@ -40,6 +40,10 @@ import {
     processAction,
 } from "@/lib/game/processors/processAction";
 
+import { createPassAction } from "@/lib/game/actions/PassAction";
+import { createEndTurnCommand } from "@/lib/game/commands";
+import { createPublicPile } from "@/lib/game/utils";
+
 import {
     clearEventListeners,
 } from "@/lib/game/events/listeners/EventListenerRegistry";
@@ -48,7 +52,7 @@ import {
     registerDefaultEventListeners,
 } from "@/lib/game/events/listeners/registerDefaultEventListeners";
 
-import { processEngine } from "@/lib/game/engine/processEngine";
+import { processEngine } from "@/lib/game/processors/processEngine";
 
 import type {
     DeckExport,
@@ -73,6 +77,8 @@ export class TestGame {
 
     public readonly player2: PlayerState;
 
+    public readonly debugId: String;
+
     constructor(
         options: {
             cardDefinitions?: Record<string, CardDefinition>;
@@ -80,6 +86,8 @@ export class TestGame {
             player2Deck?: DeckExport;
         } = {},
     ) {
+        
+        this.debugId = Math.random().toString(36).slice(2, 8);
 
         clearEventListeners();
         registerDefaultEventListeners();
@@ -351,6 +359,7 @@ export class TestGame {
 
         }
 
+        this.populatePublicPile();
     }
 
 
@@ -567,6 +576,20 @@ export class TestGame {
 
     }
 
+    private populatePublicPile(): void {
+
+        const p1Remaining = this.getPile(PileType.MainDeck, "P1").cards.splice(0);
+        const p2Remaining = this.getPile(PileType.MainDeck, "P2").cards.splice(0);
+
+        const publicPile = this.getPile(PileType.PublicPile);
+
+        publicPile.cards = createPublicPile(
+            p1Remaining,
+            p2Remaining,
+        );
+
+    }
+
     public reference(
         card: CardInstance,
     ) {
@@ -646,52 +669,28 @@ export class TestGame {
 
     }
 
-    public play(
-        intent: PlayIntent,
-    ): void {
-
-        const result =
-
-            this.compilePlay(
-                intent,
-            );
+    public play(intent: PlayIntent): void {
+        const result = this.compilePlay(intent);
 
         if (!result.success) {
-
-            throw new Error(
-
-                result.errors.join("\n") ||
-
-                "Play failed.",
-
-            );
-
+            throw new Error(result.errors.join("\n") || "Play failed.");
         }
 
-        for (
+        const stateSnapshot = structuredClone(this.state);
+        const queueSnapshot = [...this.context.commandQueue];
 
-            const action of result.actions
-
-        ) {
-
-            processAction(
-
-                this.context,
-
-                action,
-
-            );
-
+        try {
+            for (const action of result.actions) {
+                processAction(this.context, action);
+            }
+            processEngine(this.context);
+        } catch (err) {
+            Object.assign(this.state, structuredClone(stateSnapshot));
+            this.context.commandQueue = queueSnapshot;
+            throw err;
+        } finally {
+            this.notify();
         }
-
-        processEngine(
-
-            this.context,
-
-        );
-
-        this.notify();
-
     }
 
     public cardDefinition(
@@ -872,6 +871,40 @@ export class TestGame {
         );
 
     }
+
+    public pass(
+        playerId = this.state.turn.currentPlayerId,
+    ): void {
+
+        processAction(
+            this.context,
+            createPassAction({ id: playerId }),
+        );
+
+        processEngine(
+            this.context,
+        );
+
+        this.notify();
+
+    }
+
+    public endTurn(
+        playerId = this.state.turn.currentPlayerId,
+    ): void {
+
+        this.context.commandQueue.push(
+            createEndTurnCommand({ id: playerId }),
+        );
+
+        processEngine(
+            this.context,
+        );
+
+        this.notify();
+
+    }
+
     public card(
         cardId: string,
     ): CardInstance | null {
@@ -894,6 +927,20 @@ export class TestGame {
 
             const card =
                 gate.stack?.cards.find(
+                    card =>
+                        card.id === cardId,
+                );
+
+            if (card) {
+                return card;
+            }
+
+        }
+
+        for (const zone of this.state.board.setZones) {
+
+            const card =
+                zone.stack?.cards.find(
                     card =>
                         card.id === cardId,
                 );

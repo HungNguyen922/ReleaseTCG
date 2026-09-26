@@ -23,6 +23,8 @@ import {
     createLiminalAction,
 } from "../../actions";
 
+import { isValidPlaySource } from "./isValidPlaySource";
+
 import {
     failure,
     success,
@@ -78,24 +80,14 @@ export function compileLiminal(
     }
 
     //
-    // For now, bridge cards must come from hand.
-    // (Later this expands to Set Zones.)
+    // Bridge card must come from the player's hand
+    // or an occupied Set Zone.
     //
 
-    if (
-
-        bridge.location.locationType !== LocationType.Pile ||
-
-        bridge.location.pileType !== PileType.Hand ||
-
-        bridge.location.playerId !== intent.player.id
-
-    ) {
-
+    if (!isValidPlaySource(context, bridge.location, intent.player.id)) {
         return failure(
-            "Bridge must come from your hand.",
+            "Bridge must come from your hand or an occupied Set Zone.",
         );
-
     }
 
     //

@@ -3,14 +3,23 @@
 import { DragEvent } from "react";
 
 import { useGame } from "../../providers/GameProvider";
-import { useGameRevision } from "../../hooks/useGameRevision";
 
 import GameCard from "../cards/GameCard";
 
 import { BOARD } from "@/game-ui/constants/boardMetrics";
 
-import { PlayerSide } from "@/lib/game/models";
+import {
+    BoardPosition,
+    LocationType,
+    PlayerSide,
+    PlayType,
+} from "@/lib/game/models";
+
+import { SetZoneReference } from "@/lib/game/refs";
+
 import { toPlayableCardFromInstance } from "@/game-ui/utils/toPlayableCardFromInstance";
+
+import { locationRefsEqual } from "../../providers/GameProvider";
 
 interface Props {
     index: number;
@@ -22,15 +31,14 @@ export default function SetZone({
     opponent = false,
 }: Props) {
 
-    const { engine } = useGame();
-
-    const revision =
-        useGameRevision();
-
-    console.log(
-        "SET ZONE RENDER REVISION:",
-        revision,
-    );
+    const {
+        engine,
+        selectedCardIds,
+        toggleCard,
+        selectedDestinations,
+        toggleDestination,
+        playCards,
+    } = useGame();
 
     const side =
         opponent
@@ -44,67 +52,74 @@ export default function SetZone({
                 zone.position === index,
         );
 
+    const isOccupied =
+        !!setZone?.stack &&
+        setZone.stack.cards.length > 0;
+
+    const setRef: SetZoneReference = {
+        locationType: LocationType.Set,
+        side,
+        position: index as BoardPosition,
+    };
+
+    const isDestinationSelected = selectedDestinations.some(
+        ref => locationRefsEqual(ref, setRef),
+    );
+
     const topCard =
         setZone?.stack?.cards[0];
-
-    console.log(
-        "SET ZONE:",
-        side,
-        index,
-        setZone,
-        topCard,
-    );
 
     const cardDefinition =
         topCard
             ? engine.cardDefinition(topCard)
             : undefined;
 
-    function handleDragOver(
-        event: DragEvent<HTMLDivElement>,
-    ) {
-        event.preventDefault();
+    const playableCard =
+        topCard && cardDefinition
+            ? toPlayableCardFromInstance(topCard, cardDefinition)
+            : undefined;
 
-        event.dataTransfer.dropEffect =
-            "move";
+    const isSelected =
+        isOccupied
+            ? selectedCardIds.includes(topCard!.id)
+            : isDestinationSelected;
+
+    function handleClick() {
+        if (isOccupied) {
+            if (topCard) toggleCard(topCard.id);
+        } else {
+            toggleDestination(setRef);
+        }
     }
 
-    function handleDrop(
-        event: DragEvent<HTMLDivElement>,
-    ) {
+    function handleDragStart(event: DragEvent<HTMLDivElement>) {
+        if (!topCard) return;
+        event.dataTransfer.setData(
+            "application/x-release-tcg-card",
+            topCard.id,
+        );
+        event.dataTransfer.effectAllowed = "move";
+    }
+
+    function handleDragOver(event: DragEvent<HTMLDivElement>) {
+        if (isOccupied) return;
         event.preventDefault();
+        event.dataTransfer.dropEffect = "move";
+    }
+
+    function handleDrop(event: DragEvent<HTMLDivElement>) {
+        event.preventDefault();
+
+        if (isOccupied) return;
 
         const cardId =
             event.dataTransfer.getData(
                 "application/x-release-tcg-card",
             );
 
-        if (!cardId) {
-            return;
-        }
+        if (!cardId) return;
 
-        const card =
-            engine.card(cardId);
-
-        if (!card) {
-            return;
-        }
-
-        console.log(
-            "SET DROP:",
-            card.id,
-        );
-
-        engine.set(
-            card,
-            side,
-            index,
-        );
-
-        console.log(
-            "SET FINISHED",
-        );
-
+        playCards(PlayType.Set, [cardId], [setRef]);
     }
 
     return (
@@ -112,17 +127,17 @@ export default function SetZone({
             style={{
                 height: BOARD.setHeight,
             }}
+            onClick={handleClick}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
-            className="aspect-[5/5] overflow-hidden rounded-lg border bg-muted transition hover:bg-muted/80"
+            draggable={isOccupied}
+            onDragStart={handleDragStart}
+            className={`aspect-[5/5] overflow-hidden rounded-lg border bg-muted transition hover:bg-muted/80 cursor-pointer ${
+                isSelected ? "ring-4 ring-primary" : ""
+            }`}
         >
-            {cardDefinition ? (
-                <GameCard
-                    card={toPlayableCardFromInstance(
-                        topCard!,
-                        cardDefinition,
-                    )}
-                />
+            {playableCard ? (
+                <GameCard card={playableCard} />
             ) : (
                 <div
                     className="flex h-full items-center justify-center text-sm text-muted-foreground"
