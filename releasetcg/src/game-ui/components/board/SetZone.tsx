@@ -33,6 +33,8 @@ export default function SetZone({
 
     const {
         engine,
+        selectedCardIds,
+        toggleCard,
         selectedDestinations,
         toggleDestination,
         playCards,
@@ -50,19 +52,19 @@ export default function SetZone({
                 zone.position === index,
         );
 
+    const isOccupied =
+        !!setZone?.stack &&
+        setZone.stack.cards.length > 0;
+
     const setRef: SetZoneReference = {
         locationType: LocationType.Set,
         side,
         position: index as BoardPosition,
     };
 
-    const isSelected = selectedDestinations.some(
+    const isDestinationSelected = selectedDestinations.some(
         ref => locationRefsEqual(ref, setRef),
     );
-
-    function handleClick() {
-        toggleDestination(setRef);
-    }
 
     const topCard =
         setZone?.stack?.cards[0];
@@ -72,35 +74,52 @@ export default function SetZone({
             ? engine.cardDefinition(topCard)
             : undefined;
 
-    function handleDragOver(
-        event: DragEvent<HTMLDivElement>,
-    ) {
-        event.preventDefault();
+    const playableCard =
+        topCard && cardDefinition
+            ? toPlayableCardFromInstance(topCard, cardDefinition)
+            : undefined;
 
-        event.dataTransfer.dropEffect =
-            "move";
+    const isSelected =
+        isOccupied
+            ? selectedCardIds.includes(topCard!.id)
+            : isDestinationSelected;
+
+    function handleClick() {
+        if (isOccupied) {
+            if (topCard) toggleCard(topCard.id);
+        } else {
+            toggleDestination(setRef);
+        }
     }
 
-    function handleDrop(
-        event: DragEvent<HTMLDivElement>,
-    ) {
+    function handleDragStart(event: DragEvent<HTMLDivElement>) {
+        if (!topCard) return;
+        event.dataTransfer.setData(
+            "application/x-release-tcg-card",
+            topCard.id,
+        );
+        event.dataTransfer.effectAllowed = "move";
+    }
+
+    function handleDragOver(event: DragEvent<HTMLDivElement>) {
+        if (isOccupied) return;
         event.preventDefault();
+        event.dataTransfer.dropEffect = "move";
+    }
+
+    function handleDrop(event: DragEvent<HTMLDivElement>) {
+        event.preventDefault();
+
+        if (isOccupied) return;
 
         const cardId =
             event.dataTransfer.getData(
                 "application/x-release-tcg-card",
             );
 
-        if (!cardId) {
-            return;
-        }
+        if (!cardId) return;
 
-        playCards(
-            PlayType.Set,
-            [cardId],
-            [setRef],
-        );
-
+        playCards(PlayType.Set, [cardId], [setRef]);
     }
 
     return (
@@ -111,17 +130,14 @@ export default function SetZone({
             onClick={handleClick}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
+            draggable={isOccupied}
+            onDragStart={handleDragStart}
             className={`aspect-[5/5] overflow-hidden rounded-lg border bg-muted transition hover:bg-muted/80 cursor-pointer ${
                 isSelected ? "ring-4 ring-primary" : ""
             }`}
         >
-            {cardDefinition ? (
-                <GameCard
-                    card={toPlayableCardFromInstance(
-                        topCard!,
-                        cardDefinition,
-                    )}
-                />
+            {playableCard ? (
+                <GameCard card={playableCard} />
             ) : (
                 <div
                     className="flex h-full items-center justify-center text-sm text-muted-foreground"

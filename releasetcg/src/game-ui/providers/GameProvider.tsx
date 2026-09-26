@@ -33,12 +33,9 @@ interface GameContextValue {
     revealP2: boolean;
     toggleRevealP2: () => void;
 
-    // Who you're currently testing as. Drives both the play bar
-    // and drag-and-drop, so they never disagree with each other.
     activePlayerId: ActingPlayer;
     setActivePlayerId: (id: ActingPlayer) => void;
 
-    // Play builder
     activePlay: ActivePlay | null;
     setActivePlay: (play: ActivePlay | null) => void;
 
@@ -53,14 +50,13 @@ interface GameContextValue {
     clearSelection: () => void;
     confirmPlay: () => void;
 
-    // Low-level: build + submit a play intent as the active player.
-    // Used by both the confirm bar and drag-and-drop, so both paths
-    // share the same validation + error handling.
     playCards: (
         playType: PlayType,
         cardIds: string[],
         destinations: LocationReference[],
     ) => void;
+
+    resetGame: () => void;   // ← added
 
 }
 
@@ -72,6 +68,7 @@ const GameContext =
 interface Props {
 
     engine: TestGame;
+    resetGame: () => void;   // ← added
 
     children: React.ReactNode;
 
@@ -79,6 +76,7 @@ interface Props {
 
 export function GameProvider({
     engine,
+    resetGame,   // ← added
     children,
 }: Props) {
 
@@ -171,12 +169,10 @@ export function GameProvider({
         };
 
         try {
-            console.log("ENGINE USED BY playCards:", engine.debugId);
             engine.play(intent);
-            console.log("P1 HAND AFTER PLAY:", engine.hand("P1").map(c => c.id));
             clearSelection();
         } catch (err) {
-            console.error("playCards failed:", err); // ← add this
+            console.error("playCards failed:", err);
             setPlayError((err as Error).message);
         }
 
@@ -234,6 +230,8 @@ export function GameProvider({
                 clearSelection,
                 confirmPlay,
                 playCards,
+
+                resetGame,   // ← added
             }}
         >
 

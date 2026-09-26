@@ -937,6 +937,20 @@ export class TestGame {
 
         }
 
+        for (const zone of this.state.board.setZones) {
+
+            const card =
+                zone.stack?.cards.find(
+                    card =>
+                        card.id === cardId,
+                );
+
+            if (card) {
+                return card;
+            }
+
+        }
+
         return null;
 
     }

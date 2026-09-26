@@ -24,6 +24,8 @@ import {
     createSplitAction,
 } from "../../actions";
 
+import { isValidPlaySource } from "./isValidPlaySource";
+
 import {
     failure,
     success,
@@ -134,28 +136,10 @@ export function compileSplit(
         }
 
 
-        //
-        // TODO:
-        // Add Set Zones later.
-        //
-
-        if (
-
-            location.location.locationType !==
-                LocationType.Pile ||
-
-            location.location.pileType !==
-                PileType.Hand ||
-
-            location.location.playerId !==
-                intent.player.id
-
-        ) {
-
+        if (!isValidPlaySource(context, location.location, intent.player.id)) {
             return failure(
-                "All Split cards must come from your hand.",
+                "All Chain cards must come from your hand or an occupied Set Zone.",
             );
-
         }
 
 

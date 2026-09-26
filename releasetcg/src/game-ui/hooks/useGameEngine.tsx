@@ -22,13 +22,7 @@ export function useGameEngine(
     const hasConstructed =
         useRef(false);
 
-    useEffect(() => {
-
-        if (hasConstructed.current) {
-            return;
-        }
-
-        hasConstructed.current = true;
+    function buildEngine(): TestGame {
 
         const cardDatabase =
             Object.fromEntries(
@@ -37,30 +31,31 @@ export function useGameEngine(
                 ),
             );
 
-        setEngine(
+        return new TestGame({
+            cardDefinitions: cardDatabase,
+            player1Deck: buildPlaceholderDeck(cardDefinitions),
+            player2Deck: buildPlaceholderDeck(cardDefinitions),
+        });
 
-            new TestGame({
+    }
 
-                cardDefinitions:
-                    cardDatabase,
+    useEffect(() => {
 
-                player1Deck:
-                    buildPlaceholderDeck(
-                        cardDefinitions,
-                    ),
+        if (hasConstructed.current) {
+            return;
+        }
 
-                player2Deck:
-                    buildPlaceholderDeck(
-                        cardDefinitions,
-                    ),
+        hasConstructed.current = true;
 
-            }),
-
-        );
+        setEngine(buildEngine());
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    return engine;
+    function resetGame() {
+        setEngine(buildEngine());
+    }
+
+    return { engine, resetGame };
 
 }

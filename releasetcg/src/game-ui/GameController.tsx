@@ -15,57 +15,42 @@ import DebugRevealToggle from "./components/debug/DebugRevealToggle";
 
 import PlayTypeSelector from "./components/play/PlayTypeSelector";
 import PlayConfirmBar from "./components/play/PlayConfirmBar";
+import WinModal from "./components/modals/WinModal";
 
 import { CardDefinition } from "@/lib/game/models";
 
 export default function GameController(
-    props: {
-        cardDefinitions: CardDefinition[];
-    },
+    props: { cardDefinitions: CardDefinition[] },
 ) {
 
-    const engine =
-        useGameEngine(
-            props.cardDefinitions,
-        );
+    const { engine, resetGame } =
+        useGameEngine(props.cardDefinitions);
 
     if (!engine) {
-
         return (
             <div className="flex h-full w-full items-center justify-center">
                 Loading game...
             </div>
         );
-
     }
 
     return (
-
-        <GameProvider engine={engine}>
-
+        <GameProvider engine={engine} resetGame={resetGame}>
             <div className="relative h-full w-full overflow-hidden bg-background">
-
                 <GameBoard />
-
                 <OpponentHand />
-
                 <PlayerHand />
-
                 <TurnInfo />
-
                 <PhaseAdvanceButton />
-
                 <DebugRevealToggle />
+                <WinModal />
 
-                <div className="absolute bottom-20 left-4 z-50 flex flex-col items-start gap-2">
+                <div className="absolute bottom-24 left-4 z-50 flex flex-col items-start gap-2">
                     <PlayConfirmBar />
                     <PlayTypeSelector />
                 </div>
-
             </div>
-
         </GameProvider>
-
     );
 
 }
