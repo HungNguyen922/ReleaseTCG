@@ -10,7 +10,7 @@ export default function GapPile() {
             style={{
                 height: BOARD.pileHeight,
             }}
-            className="aspect-[5/7] rounded-lg border"
+            className="flex aspect-[5/7] items-center justify-center rounded-lg border text-sm text-muted-foreground"
         >
 
             Gap

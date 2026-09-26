@@ -21,7 +21,7 @@ export default function PlayTypeSelector() {
 
     return (
 
-        <div className="flex flex-wrap gap-1 rounded-lg border bg-card p-1 shadow-md">
+        <div className="grid grid-cols-4 gap-1 rounded-lg border bg-card p-1 shadow-md">
 
             {PLAY_TYPES.map(({ label, value }) => (
 
