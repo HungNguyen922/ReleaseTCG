@@ -8,9 +8,6 @@ import {
     useGame,
 } from "../../providers/GameProvider";
 
-import {
-    useGameRevision,
-} from "../../hooks/useGameRevision";
 
 import GameCard from "../cards/GameCard";
 
@@ -45,7 +42,6 @@ export default function GateZone({
 
     const {
         engine,
-        revision,
         selectedDestinations,
         toggleDestination,
         playCards,
