@@ -2,13 +2,7 @@ import { EngineContext } from "@/lib/game/EngineContext";
 
 import { ChainAction } from "../../actions/ChainAction";
 
-import {
-    createMoveCardCommand, createStartPriorityCommand,
-} from "../../commands";
-
-import {
-    createBeginPhaseCommand,
-} from "../../commands/BeginPhaseCommand";
+import { createMoveCardCommand, createBeginAttackCommand, createBeginPhaseCommand } from "@/lib/game/commands";
 
 import {
     markActionTaken,
@@ -55,6 +49,10 @@ export function processChainAction(
 
     }
 
+    context.commandQueue.push(
+        createBeginAttackCommand({ gate: action.gate }),
+    );
+    
     context.commandQueue.push(
 
         createBeginPhaseCommand(

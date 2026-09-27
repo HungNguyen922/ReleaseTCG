@@ -2,17 +2,7 @@ import { EngineContext } from "@/lib/game/EngineContext";
 
 import { ConstructAction } from "@/lib/game/actions";
 
-import {
-
-    createCreateGateCommand,
-
-    createMoveCardCommand,
-
-} from "@/lib/game/commands";
-
-import {
-    createBeginPhaseCommand,
-} from "../../commands/BeginPhaseCommand";
+import { createCreateGateCommand, createMoveCardCommand, createBeginAttackCommand, createBeginPhaseCommand } from "@/lib/game/commands";
 
 import {
 
@@ -93,6 +83,10 @@ export function processConstructAction(
     // Begin priority.
     //
 
+    context.commandQueue.push(
+        createBeginAttackCommand({ gate: action.gate }),
+    );
+    
     context.commandQueue.push(
     
         createBeginPhaseCommand(

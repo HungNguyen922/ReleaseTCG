@@ -13,8 +13,7 @@ export default function OpponentField() {
 
                 <ExtraDeckPile opponent />
 
-                <HealthCounter opponent />
-
+                <HealthCounter playerId="P2" />
             </div>
 
         </section>

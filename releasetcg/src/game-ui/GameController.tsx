@@ -45,7 +45,7 @@ export default function GameController(
                 <DebugRevealToggle />
                 <WinModal />
 
-                <div className="absolute bottom-5 left-4 z-50 flex flex-col items-start gap-2">
+                <div className="absolute bottom-15 left-4 z-50 flex flex-col items-start gap-2">
                     <PlayConfirmBar />
                     <PlayTypeSelector />
                 </div>

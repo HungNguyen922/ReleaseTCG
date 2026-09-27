@@ -22,6 +22,10 @@ export function compilePlayIntent(
     intent: PlayIntent,
 ): RuleResult {
 
+    if (intent.player.id !== context.state.turn.currentPlayerId) {
+        return failure("It's not your turn.");
+    }
+
     if (
         intent.playType !== PlayType.Set &&
         (
@@ -29,11 +33,9 @@ export function compilePlayIntent(
             context.state.turn.actionTaken
         )
     ) {
-
         return failure(
             "You've already made your Play this turn.",
         );
-
     }
     
     switch (intent.playType) {

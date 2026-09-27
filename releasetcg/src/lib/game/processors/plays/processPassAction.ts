@@ -4,9 +4,7 @@ import { PassAction } from "../../actions/PassAction";
 
 import { findPlayer } from "../../queries";
 
-import {
-    createBeginPhaseCommand,
-} from "../../commands/BeginPhaseCommand";
+import { createMoveCardCommand, createBeginPhaseCommand } from "@/lib/game/commands";
 
 import {
     markActionTaken,

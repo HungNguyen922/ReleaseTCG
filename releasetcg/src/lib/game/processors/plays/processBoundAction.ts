@@ -2,13 +2,7 @@ import { EngineContext } from "@/lib/game/EngineContext";
 
 import { BoundAction } from "@/lib/game/actions";
 
-import {
-    createMoveCardCommand,
-} from "@/lib/game/commands";
-
-import {
-    createBeginPhaseCommand,
-} from "../../commands/BeginPhaseCommand";
+import { createMoveCardCommand, createBeginAttackCommand, createBeginPhaseCommand } from "@/lib/game/commands";
 
 import {
     markActionTaken,
@@ -84,6 +78,10 @@ export function processBoundAction(
     //
     // Begin priority.
     //
+
+    context.commandQueue.push(
+        createBeginAttackCommand({ gate: action.gate }),
+    );
 
     context.commandQueue.push(
     

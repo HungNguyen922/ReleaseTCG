@@ -4,14 +4,7 @@ import {
     LiminalAction,
 } from "@/lib/game/actions";
 
-import {
-    createMoveCardCommand,
-    createMoveGateCommand,
-} from "@/lib/game/commands";
-
-import {
-    createBeginPhaseCommand,
-} from "../../commands/BeginPhaseCommand";
+import { createMoveCardCommand, createMoveGateCommand, createBeginAttackCommand, createBeginPhaseCommand } from "@/lib/game/commands";
 
 
 import {
@@ -91,6 +84,12 @@ export function processLiminalAction(
     // Priority returns after the entire
     // traversal has completed.
     //
+
+    context.commandQueue.push(
+        createBeginAttackCommand({
+            gate: action.gates[action.gates.length - 1],
+        }),
+    );
 
     context.commandQueue.push(
     

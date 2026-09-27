@@ -12,7 +12,7 @@ export default function PlayerField() {
 
             <div className="flex items-center gap-4">
 
-                <HealthCounter />
+                <HealthCounter playerId="P1" />
 
                 <ExtraDeckPile />
 

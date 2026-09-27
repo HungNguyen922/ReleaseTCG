@@ -4,13 +4,7 @@ import {
     SplitAction,
 } from "@/lib/game/actions";
 
-import {
-    createMoveCardCommand,
-} from "@/lib/game/commands";
-
-import {
-    createBeginPhaseCommand,
-} from "../../commands/BeginPhaseCommand";
+import { createMoveCardCommand, createBeginAttackCommand, createBeginPhaseCommand } from "@/lib/game/commands";
 
 import {
     markActionTaken,
@@ -56,6 +50,11 @@ export function processSplitAction(
 
     }
 
+    for (const gate of action.gates) {
+        context.commandQueue.push(
+            createBeginAttackCommand({ gate }),
+        );
+    }
 
    context.commandQueue.push(
 

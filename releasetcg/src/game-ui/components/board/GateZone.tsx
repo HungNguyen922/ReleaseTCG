@@ -1,17 +1,16 @@
 "use client";
 
-import {
-    DragEvent,
-} from "react";
+import { DragEvent, useState } from "react";
 
-import {
-    useGame,
-} from "../../providers/GameProvider";
-
+import { useGame } from "../../providers/GameProvider";
 
 import GameCard from "../cards/GameCard";
+import GateStackPreview from "./GateStackPreview";
 
 import { toPlayableCardFromInstance } from "../../utils/toPlayableCardFromInstance";
+
+import { detectAttackPattern } from "@/lib/game/queries/attack";
+import { isPure } from "@/lib/game/queries/purity";
 
 import {
     BoardPosition,
@@ -24,22 +23,14 @@ import { GateReference } from "@/lib/game/refs";
 
 import { locationRefsEqual } from "../../providers/GameProvider";
 
+import { PlayableCard } from "@/types/cards";
+
 interface Props {
-
     row: number;
-
     column: number;
-
 }
 
-export default function GateZone({
-
-    row,
-
-    column,
-
-}: Props) {
-
+export default function GateZone({ row, column }: Props) {
     const {
         engine,
         selectedDestinations,
@@ -47,17 +38,14 @@ export default function GateZone({
         playCards,
     } = useGame();
 
-    const side =
-        row === 0
-            ? PlayerSide.Top
-            : PlayerSide.Bottom;
+    const [isHovered, setIsHovered] = useState(false);
+    const [hoverAnchor, setHoverAnchor] = useState<DOMRect | null>(null);
 
-    const gate =
-        engine.state.board.gateZones.find(
-            gate =>
-                gate.side === side &&
-                gate.position === column,
-        );
+    const side = row === 0 ? PlayerSide.Top : PlayerSide.Bottom;
+
+    const gate = engine.state.board.gateZones.find(
+        gate => gate.side === side && gate.position === column,
+    );
 
     const gateRef: GateReference = {
         locationType: LocationType.Gate,
@@ -73,90 +61,93 @@ export default function GateZone({
         toggleDestination(gateRef);
     }
 
-    const topCard =
-        gate?.stack?.cards[0];
+    // Top-first ordering: index 0 is the card physically on top of the Gate.
+    const allCards = gate?.stack?.cards ?? [];
 
-    const cardDefinition =
-        topCard
-            ? engine.cardDefinition(
-                topCard,
-            )
-            : undefined;
+    const playableCards: PlayableCard[] = allCards
+        .map(card => {
+            const definition = engine.cardDefinition(card);
+            return definition
+                ? toPlayableCardFromInstance(card, definition)
+                : null;
+        })
+        .filter((c): c is PlayableCard => c !== null);
 
-    const playableCard =
-        topCard && cardDefinition
-            ? toPlayableCardFromInstance(
-                topCard,
-                cardDefinition,
-            )
-            : undefined;
+    const previewDamage = allCards.length
+        ? detectAttackPattern(engine.context, allCards)
+        : 0;
 
-    function handleDragOver(
-        event: DragEvent<HTMLDivElement>,
-    ) {
+    const isTopPure = allCards.length > 0
+        ? isPure(engine.context, allCards[0])
+        : false;
 
-        event.preventDefault();
-
-        event.dataTransfer.dropEffect =
-            "move";
-
+    function handleMouseEnter(event: React.MouseEvent<HTMLDivElement>) {
+        setIsHovered(true);
+        setHoverAnchor(event.currentTarget.getBoundingClientRect());
     }
 
-    function handleDrop(
-        event: DragEvent<HTMLDivElement>,
-    ) {
+    function handleMouseLeave() {
+        setIsHovered(false);
+        setHoverAnchor(null);
+    }
 
+    function handleDragOver(event: DragEvent<HTMLDivElement>) {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = "move";
+    }
+
+    function handleDrop(event: DragEvent<HTMLDivElement>) {
         event.preventDefault();
 
-        const cardId =
-            event.dataTransfer.getData(
-                "application/x-release-tcg-card",
-            );
+        const cardId = event.dataTransfer.getData(
+            "application/x-release-tcg-card",
+        );
 
         if (!cardId) {
             return;
         }
 
-        // Goes through the same playCards() path as the play bar,
-        // so it respects "acting as" and surfaces errors instead
-        // of throwing.
-        playCards(
-            PlayType.Burn,
-            [cardId],
-            [gateRef],
-        );
-
+        playCards(PlayType.Burn, [cardId], [gateRef]);
     }
 
     return (
-
         <div
             onClick={handleClick}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
-            className={`h-[25vh] aspect-[5/7] overflow-hidden rounded-xl border bg-muted transition hover:bg-muted/80 cursor-pointer ${
+            className={`h-[25vh] aspect-[5/7] rounded-xl border bg-muted transition hover:bg-muted/80 cursor-pointer ${
                 isSelected ? "ring-4 ring-primary" : ""
             }`}
         >
-
-            {
-                playableCard
-                    ? (
-                        <GameCard
-                            card={playableCard}
-                        />
-                    )
-                    : (
+            {playableCards.length ? (
+                <div className="relative h-full w-full">
+                    {[...playableCards].reverse().map((card, i) => (
                         <div
-                            className="flex h-full items-center justify-center text-sm text-muted-foreground"
+                            key={card.id}
+                            className="absolute inset-0"
+                            style={{
+                                transform: `translate(${i * 2}%, ${i * -2}%)`,
+                                zIndex: i + 1,
+                            }}
                         >
-                            Empty Gate
+                            <GameCard card={card} />
                         </div>
-                    )
-            }
+                    ))}
+                </div>
+            ) : (
+                <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+                    Empty Gate
+                </div>
+            )}
 
+            <GateStackPreview
+                cards={playableCards.slice(0, 3)}
+                height={allCards.length}
+                isTopPure={isTopPure}
+                anchor={isHovered ? hoverAnchor : null}
+            />
         </div>
-
     );
-
 }

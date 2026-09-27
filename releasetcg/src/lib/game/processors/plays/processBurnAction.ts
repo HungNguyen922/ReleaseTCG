@@ -6,13 +6,7 @@ import {
     findCard,
 } from "../../queries";
 
-import {
-    createMoveCardCommand,
-} from "../../commands/MoveCardCommand";
-
-import {
-    createBeginPhaseCommand,
-} from "../../commands/BeginPhaseCommand";
+import { createMoveCardCommand, createBeginAttackCommand, createBeginPhaseCommand } from "@/lib/game/commands";
 
 import {
     markActionTaken,
@@ -60,13 +54,11 @@ export function processBurnAction(
     }
 
     context.commandQueue.push(
-    
-        createBeginPhaseCommand(
+        createBeginAttackCommand({ gate: action.gate }),
+    );
 
-            TurnPhase.Fill,
-
-        ),
-
+    context.commandQueue.push(
+        createBeginPhaseCommand(TurnPhase.Fill),
     );
 
     incrementCardsPlayedThisTurn(context, action.cards.length);

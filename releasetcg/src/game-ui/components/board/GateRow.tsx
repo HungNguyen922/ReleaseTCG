@@ -17,7 +17,7 @@ export default function GateRow({
     return (
 
         <div
-            className="flex items-center gap-[2vw]"
+            className="flex items-center gap-[3vw]"
         >
 
             <GateLane

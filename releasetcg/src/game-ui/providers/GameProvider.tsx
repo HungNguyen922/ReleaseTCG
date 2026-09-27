@@ -9,7 +9,11 @@ import {
 
 import { TestGame } from "@/utils/test/builders/TestGame";
 
-import { CardInstance, PlayType } from "@/lib/game/models";
+import { CardInstance, PlayType, TurnPhase } from "@/lib/game/models";
+
+import { createBeginPhaseCommand } from "@/lib/game/commands";
+
+import { processEngine } from "@/lib/game/processors";
 
 import { LocationReference } from "@/lib/game/refs";
 
@@ -142,22 +146,30 @@ export function GameProvider({
         cardIds: string[],
         destinations: LocationReference[],
     ) {
-
         setPlayError(null);
 
         const cards: CardInstance[] = [];
 
         for (const id of cardIds) {
-
             const card = engine.card(id);
-
             if (!card) {
                 setPlayError("One or more selected cards could not be found.");
                 return;
             }
-
             cards.push(card);
+        }
 
+        // Instant is the default resting phase. Action only exists so
+        // compilePlayIntent has something to gate on, so flip into it
+        // silently the moment a real Play (not a Set/Load) is attempted.
+        if (
+            playType !== PlayType.Set &&
+            engine.context.state.turn.phase === TurnPhase.Instant
+        ) {
+            engine.context.commandQueue.push(
+                createBeginPhaseCommand(TurnPhase.Action),
+            );
+            processEngine(engine.context);
         }
 
         const intent = {
@@ -175,7 +187,6 @@ export function GameProvider({
             console.error("playCards failed:", err);
             setPlayError((err as Error).message);
         }
-
     }
 
     function confirmPlay() {
