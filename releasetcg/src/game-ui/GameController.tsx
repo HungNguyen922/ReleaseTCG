@@ -7,7 +7,6 @@ import { useGameEngine } from "./hooks/useGameEngine";
 import GameBoard from "./components/board/GameBoard";
 
 import TurnInfo from "./components/board/TurnInfo";
-import PhaseAdvanceButton from "./components/board/PhaseAdvanceButton";
 
 import OpponentHand from "./components/hand/OpponentHand";
 import PlayerHand from "./components/hand/PlayerHand";
@@ -41,7 +40,6 @@ export default function GameController(
                 <OpponentHand />
                 <PlayerHand />
                 <TurnInfo />
-                <PhaseAdvanceButton />
                 <DebugRevealToggle />
                 <WinModal />
 
