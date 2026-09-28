@@ -90,17 +90,7 @@ export function processLiminalAction(
             gate: action.gates[action.gates.length - 1],
         }),
     );
-
-    context.commandQueue.push(
     
-        createBeginPhaseCommand(
-
-            TurnPhase.Fill,
-
-        ),
-
-    );
-
     incrementCardsPlayedThisTurn(
         context,
         1,

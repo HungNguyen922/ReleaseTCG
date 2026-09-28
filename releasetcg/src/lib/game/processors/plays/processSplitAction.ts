@@ -56,15 +56,5 @@ export function processSplitAction(
         );
     }
 
-   context.commandQueue.push(
-
-        createBeginPhaseCommand(
-
-            TurnPhase.Fill,
-
-        ),
-
-    );
-
     incrementCardsPlayedThisTurn(context, action.cards.length);
 }

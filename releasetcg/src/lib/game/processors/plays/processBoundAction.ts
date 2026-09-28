@@ -83,16 +83,6 @@ export function processBoundAction(
         createBeginAttackCommand({ gate: action.gate }),
     );
 
-    context.commandQueue.push(
-    
-        createBeginPhaseCommand(
-
-            TurnPhase.Fill,
-
-        ),
-
-    );
-
     incrementCardsPlayedThisTurn(
         context,
         1 + action.middle.length + 1,

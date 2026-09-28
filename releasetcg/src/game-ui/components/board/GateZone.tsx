@@ -6,6 +6,7 @@ import { useGame } from "../../providers/GameProvider";
 
 import GameCard from "../cards/GameCard";
 import GateStackPreview from "./GateStackPreview";
+import GateStackModal from "./GateStackModal";
 
 import { toPlayableCardFromInstance } from "../../utils/toPlayableCardFromInstance";
 
@@ -64,6 +65,9 @@ export default function GateZone({ row, column }: Props) {
     // Top-first ordering: index 0 is the card physically on top of the Gate.
     const allCards = gate?.stack?.cards ?? [];
 
+    // inside GateZone, next to the other useState calls
+    const [isStackOpen, setIsStackOpen] = useState(false);
+
     const playableCards: PlayableCard[] = allCards
         .map(card => {
             const definition = engine.cardDefinition(card);
@@ -72,10 +76,6 @@ export default function GateZone({ row, column }: Props) {
                 : null;
         })
         .filter((c): c is PlayableCard => c !== null);
-
-    const previewDamage = allCards.length
-        ? detectAttackPattern(engine.context, allCards)
-        : 0;
 
     const isTopPure = allCards.length > 0
         ? isPure(engine.context, allCards[0])
@@ -89,6 +89,20 @@ export default function GateZone({ row, column }: Props) {
     function handleMouseLeave() {
         setIsHovered(false);
         setHoverAnchor(null);
+    }
+
+    function handleContextMenu(event: React.MouseEvent<HTMLDivElement>) {
+        event.preventDefault(); 
+
+        if (playableCards.length === 0) {
+            return;
+        }
+
+        // close the hover preview so it doesn't sit behind the modal
+        setIsHovered(false);
+        setHoverAnchor(null);
+
+        setIsStackOpen(true);
     }
 
     function handleDragOver(event: DragEvent<HTMLDivElement>) {
@@ -111,43 +125,52 @@ export default function GateZone({ row, column }: Props) {
     }
 
     return (
-        <div
-            onClick={handleClick}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            onDragOver={handleDragOver}
-            onDrop={handleDrop}
-            className={`h-[25vh] aspect-[5/7] rounded-xl border bg-muted transition hover:bg-muted/80 cursor-pointer ${
-                isSelected ? "ring-4 ring-primary" : ""
-            }`}
-        >
-            {playableCards.length ? (
-                <div className="relative h-full w-full">
-                    {[...playableCards].reverse().map((card, i) => (
-                        <div
-                            key={card.id}
-                            className="absolute inset-0"
-                            style={{
-                                transform: `translate(${i * 2}%, ${i * -2}%)`,
-                                zIndex: i + 1,
-                            }}
-                        >
-                            <GameCard card={card} />
-                        </div>
-                    ))}
-                </div>
-            ) : (
-                <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
-                    Empty Gate
-                </div>
-            )}
+        <>
+            <div
+                onClick={handleClick}
+                onContextMenu={handleContextMenu}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+                className={`h-[25vh] aspect-[5/7] rounded-xl border bg-muted transition hover:bg-muted/80 cursor-pointer ${
+                    isSelected ? "ring-4 ring-primary" : ""
+                }`}
+            >
+                {playableCards.length ? (
+                    <div className="relative h-full w-full">
+                        {[...playableCards].reverse().map((card, i) => (
+                            <div
+                                key={card.id}
+                                className="absolute inset-0"
+                                style={{
+                                    transform: `translate(${i * 2}%, ${i * -2}%)`,
+                                    zIndex: i + 1,
+                                }}
+                            >
+                                <GameCard card={card} />
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+                        Empty Gate
+                    </div>
+                )}
 
-            <GateStackPreview
-                cards={playableCards.slice(0, 3)}
-                height={allCards.length}
+                <GateStackPreview
+                    cards={playableCards.slice(0, 3)}
+                    height={allCards.length}
+                    isTopPure={isTopPure}
+                    anchor={isHovered ? hoverAnchor : null}
+                />
+            </div>
+            <GateStackModal
+                open={isStackOpen}
+                onOpenChange={setIsStackOpen}
+                cards={playableCards}
                 isTopPure={isTopPure}
-                anchor={isHovered ? hoverAnchor : null}
             />
-        </div>
+        </>
     );
 }
