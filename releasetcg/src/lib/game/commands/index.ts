@@ -26,3 +26,7 @@ export * from "./CommandType";
 
 export * from "./EndTurnCommand";
 export * from "./EnforceMaxHandCommand";
+
+export * from "./OpenParryWindowCommand";
+export * from "./PlayParryCommand";
+export * from "./ResolveParryChainCommand";

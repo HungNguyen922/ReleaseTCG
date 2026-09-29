@@ -10,3 +10,6 @@ export * from "./BoundAction";
 export * from "./SplitAction";
 export * from "./LiminalAction";
 export * from "./SetAction";
+
+export * from "./ParryAction";
+export * from "./DeclineParryAction";

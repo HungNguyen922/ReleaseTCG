@@ -15,6 +15,8 @@ import { ResolveEffectsAction } from "./ResolveEffectsAction";
 import { ResolveAttackAction } from "./ResolveAttackAction";
 import { RevealCardsAction } from "./RevealCardsAction";
 import { ShufflePileAction } from "./ShufflePileAction";
+import { ParryAction } from "./ParryAction";
+import { DeclineParryAction } from "./DeclineParryAction";
 
 
 export type GameAction =
@@ -34,3 +36,5 @@ export type GameAction =
     | DrawCardsAction
     | RevealCardsAction
     | ShufflePileAction
+    | ParryAction
+    | DeclineParryAction;

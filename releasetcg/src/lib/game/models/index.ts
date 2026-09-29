@@ -2,6 +2,7 @@ export * from "./ActionCategory";
 export * from "./AttachedZone";
 export * from "./BoardPosition";
 export * from "./BoardState";
+export * from "./ParryState";
 export * from "./CardDefinition";
 export * from "./CardInstance";
 export * from "./TurnPhase";

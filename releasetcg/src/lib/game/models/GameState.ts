@@ -2,6 +2,7 @@ import { BoardState } from "./BoardState";
 import { PileState } from "./PileState";
 import { PlayerState } from "./PlayerState";
 import { PriorityState } from "./PriorityState";
+import { ParryState } from "./ParryState";
 import { TurnState } from "./TurnState";
 
 export interface GameState {
@@ -42,6 +43,11 @@ export interface GameState {
      * Current priority chain.
      */
     priority: PriorityState;
+
+    /**
+     * Open parry window, if a Play is currently being responded to.
+     */
+    parry: ParryState | null;
 
     /**
      * Winner of the game.

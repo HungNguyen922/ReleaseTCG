@@ -10,7 +10,7 @@ export enum CommandType {
     DestroyPile = "destroyPile",
 
     ShufflePile = "shufflePile",
-    
+
     DamagePlayer = "damagePlayer",
     HealPlayer = "healPlayer",
 
@@ -26,4 +26,8 @@ export enum CommandType {
     BeginPhase = "beginPhase",
     EndTurn = "endTurn",
     EnforceMaxHand = "enforceMaxHand",
+
+    OpenParryWindow = "openParryWindow",
+    PlayParry = "playParry",
+    ResolveParryChain = "resolveParryChain",
 }

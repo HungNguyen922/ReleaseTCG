@@ -17,6 +17,9 @@ import { ShufflePileCommand } from "./ShufflePileCommand";
 import { StartPriorityCommand } from "./StartPriorityCommand";
 import { PassCommand } from "./PassCommand";
 import { EnforceMaxHandCommand } from "./EnforceMaxHandCommand";
+import { OpenParryWindowCommand } from "./OpenParryWindowCommand";
+import { PlayParryCommand } from "./PlayParryCommand";
+import { ResolveParryChainCommand } from "./ResolveParryChainCommand";
 
 export type GameCommand =
     | MoveCardCommand
@@ -38,4 +41,7 @@ export type GameCommand =
     | EndPriorityCommand
     | BeginPhaseCommand
     | EndTurnCommand
-    | EnforceMaxHandCommand;
+    | EnforceMaxHandCommand
+    | OpenParryWindowCommand
+    | PlayParryCommand
+    | ResolveParryChainCommand;

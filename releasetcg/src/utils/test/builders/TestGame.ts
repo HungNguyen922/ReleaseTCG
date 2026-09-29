@@ -28,7 +28,8 @@ import {
 
 import { GateReference, LocationReference } from "@/lib/game/refs";
 import { PlayIntent } from "@/lib/game/intents/PlayIntent";
-import { compilePlayIntent } from "@/lib/game/rules/play/compilePlayIntent";
+import { RuleResult } from "@/lib/game/rules";
+import { compilePlayIntent, compileParry, compileDeclineParry } from "@/lib/game/rules/play";
 
 import { createEngineContext } from "@/lib/game";
 
@@ -254,6 +255,8 @@ export class TestGame {
 
             } satisfies PriorityState,
 
+            parry: null, 
+
             winnerId: null,
 
         };
@@ -396,7 +399,8 @@ export class TestGame {
 
     }
 
-    public addHandCard(
+    private addCardToPile(
+        pileType: PileType,
         options: TestCardDefinitionOptions & {
 
             playerId?: string;
@@ -419,7 +423,7 @@ export class TestGame {
 
         this.getPile(
 
-            PileType.Hand,
+            pileType,
 
             playerId,
 
@@ -430,6 +434,16 @@ export class TestGame {
         return card;
 
     }
+    
+    public addHandCard(
+        options: TestCardDefinitionOptions & {
+
+            playerId?: string;
+
+        } = {},
+    ): CardInstance {
+        return this.addCardToPile(PileType.Hand, options);
+    }
 
     public addDeckCard(
         options: TestCardDefinitionOptions & {
@@ -438,32 +452,7 @@ export class TestGame {
 
         } = {},
     ): CardInstance {
-
-        const playerId =
-            options.playerId ?? "P1";
-
-        const card =
-
-            this.createCard(
-
-                playerId,
-
-                options,
-
-            );
-
-        this.getPile(
-
-            PileType.MainDeck,
-
-            playerId,
-
-        ).cards.push(card);
-
-        this.notify();
-
-        return card;
-
+        return this.addCardToPile(PileType.MainDeck, options);
     }
 
     public addGateCard(
@@ -590,6 +579,33 @@ export class TestGame {
 
     }
 
+    private runCompiled(
+        result: RuleResult,
+        fallbackMessage: string,
+    ): void {
+
+        if (!result.success) {
+            throw new Error(result.errors.join("\n") || fallbackMessage);
+        }
+
+        const stateSnapshot = structuredClone(this.state);
+        const queueSnapshot = [...this.context.commandQueue];
+
+        try {
+            for (const action of result.actions) {
+                processAction(this.context, action);
+            }
+            processEngine(this.context);
+        } catch (err) {
+            Object.assign(this.state, structuredClone(stateSnapshot));
+            this.context.commandQueue = queueSnapshot;
+            throw err;
+        } finally {
+            this.notify();
+        }
+
+    }
+
     public reference(
         card: CardInstance,
     ) {
@@ -670,27 +686,42 @@ export class TestGame {
     }
 
     public play(intent: PlayIntent): void {
-        const result = this.compilePlay(intent);
+        this.runCompiled(
+            this.compilePlay(intent),
+            "Play failed.",
+        );
+    }
 
-        if (!result.success) {
-            throw new Error(result.errors.join("\n") || "Play failed.");
-        }
+    public parry(
+        playerId: string,
+        cardId: string,
+    ): void {
 
-        const stateSnapshot = structuredClone(this.state);
-        const queueSnapshot = [...this.context.commandQueue];
+        this.runCompiled(
+            compileParry(
+                this.context,
+                {
+                    player: { id: playerId },
+                    card: { id: cardId },
+                },
+            ),
+            "Parry failed.",
+        );
 
-        try {
-            for (const action of result.actions) {
-                processAction(this.context, action);
-            }
-            processEngine(this.context);
-        } catch (err) {
-            Object.assign(this.state, structuredClone(stateSnapshot));
-            this.context.commandQueue = queueSnapshot;
-            throw err;
-        } finally {
-            this.notify();
-        }
+    }
+
+    public declineParry(
+        playerId: string,
+    ): void {
+
+        this.runCompiled(
+            compileDeclineParry(
+                this.context,
+                { id: playerId },
+            ),
+            "Could not stop parrying.",
+        );
+
     }
 
     public cardDefinition(

@@ -9,7 +9,9 @@ import {
 
 import { TestGame } from "@/utils/test/builders/TestGame";
 
-import { CardInstance, PlayType, TurnPhase } from "@/lib/game/models";
+import { CardInstance, ParryState, PlayType, TurnPhase } from "@/lib/game/models";
+
+import { getParryOptions } from "@/lib/game/queries/parry";
 
 import { createBeginPhaseCommand } from "@/lib/game/commands";
 
@@ -62,6 +64,12 @@ interface GameContextValue {
 
     resetGame: () => void;   // ← added
 
+    parry: ParryState | null;   // ← added
+    parryOptionIds: string[];   // ← added
+
+    confirmParry: () => void;   // ← added
+    declineParry: () => void;   // ← added
+
 }
 
 const GameContext =
@@ -80,7 +88,7 @@ interface Props {
 
 export function GameProvider({
     engine,
-    resetGame,   // ← added
+    resetGame,
     children,
 }: Props) {
 
@@ -215,6 +223,43 @@ export function GameProvider({
 
     }
 
+        const parry = engine.context.state.parry;
+
+    const parryOptionIds = parry
+        ? getParryOptions(engine.context, parry.responderId).map(card => card.id)
+        : [];
+
+    function confirmParry() {
+
+        setPlayError(null);
+
+        if (selectedCardIds.length !== 1) {
+            setPlayError("Select one card to parry with.");
+            return;
+        }
+
+        try {
+            engine.parry(activePlayerId, selectedCardIds[0]);
+            setSelectedCardIds([]);
+        } catch (err) {
+            setPlayError((err as Error).message);
+        }
+
+    }
+
+    function declineParry() {
+
+        setPlayError(null);
+
+        try {
+            engine.declineParry(activePlayerId);
+            setSelectedCardIds([]);
+        } catch (err) {
+            setPlayError((err as Error).message);
+        }
+
+    }
+
     return (
 
         <GameContext.Provider
@@ -242,7 +287,15 @@ export function GameProvider({
                 confirmPlay,
                 playCards,
 
-                resetGame,   // ← added
+                resetGame,
+
+                parry,
+                parryOptionIds,
+
+                confirmParry,
+                declineParry,
+
+                
             }}
         >
 

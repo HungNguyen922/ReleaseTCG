@@ -6,3 +6,4 @@ export * from "./processSplitAction";
 export * from "./processLiminalAction";
 export * from "./processSetAction";
 export * from "./processPassAction";
+export * from "./processParryAction"

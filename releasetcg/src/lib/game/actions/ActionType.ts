@@ -32,4 +32,8 @@ export enum ActionType {
     CreateGate = "CREATE_GATE",
 
     DestroyGate = "DESTROY_GATE",
+
+    Parry = "PARRY",
+    
+    DeclineParry = "DECLINE_PARRY",
 }
