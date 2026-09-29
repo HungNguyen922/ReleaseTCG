@@ -2,14 +2,12 @@ import { EngineContext } from "@/lib/game/EngineContext";
 
 import { BoundAction } from "@/lib/game/actions";
 
-import { createMoveCardCommand, createBeginAttackCommand, createBeginPhaseCommand } from "@/lib/game/commands";
+import { createMoveCardCommand, createOpenParryWindowCommand } from "@/lib/game/commands";
 
 import {
     markActionTaken,
     incrementCardsPlayedThisTurn,
 } from "@/lib/game/turn";
-
-import { TurnPhase } from "../../models";
 
 export function processBoundAction(
 
@@ -80,7 +78,7 @@ export function processBoundAction(
     //
 
     context.commandQueue.push(
-        createBeginAttackCommand({ gate: action.gate }),
+        createOpenParryWindowCommand(action.player, [action.gate], action.cards),
     );
 
     incrementCardsPlayedThisTurn(

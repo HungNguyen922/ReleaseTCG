@@ -4,7 +4,7 @@ import {
     SplitAction,
 } from "@/lib/game/actions";
 
-import { createMoveCardCommand, createBeginAttackCommand, createBeginPhaseCommand } from "@/lib/game/commands";
+import { createMoveCardCommand, createOpenParryWindowCommand } from "@/lib/game/commands";
 
 import {
     markActionTaken,
@@ -52,7 +52,7 @@ export function processSplitAction(
 
     for (const gate of action.gates) {
         context.commandQueue.push(
-            createBeginAttackCommand({ gate }),
+            createOpenParryWindowCommand(action.player, action.gates, action.cards),
         );
     }
 

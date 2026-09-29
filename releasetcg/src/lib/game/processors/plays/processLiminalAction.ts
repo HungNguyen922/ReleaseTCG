@@ -4,7 +4,7 @@ import {
     LiminalAction,
 } from "@/lib/game/actions";
 
-import { createMoveCardCommand, createMoveGateCommand, createBeginAttackCommand } from "@/lib/game/commands";
+import { createMoveCardCommand, createMoveGateCommand, createOpenParryWindowCommand } from "@/lib/game/commands";
 
 import {
     markActionTaken,
@@ -83,9 +83,7 @@ export function processLiminalAction(
     //
 
     context.commandQueue.push(
-        createBeginAttackCommand({
-            gate: action.gates[action.gates.length - 1],
-        }),
+        createOpenParryWindowCommand(action.player, [action.gates[action.gates.length - 1]], action.cards),
     );
 
     incrementCardsPlayedThisTurn(

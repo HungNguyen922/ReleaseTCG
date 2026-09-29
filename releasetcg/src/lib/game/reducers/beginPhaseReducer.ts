@@ -1,5 +1,6 @@
 import { EngineContext } from "../EngineContext";
 
+import { TurnPhase } from "../models";
 import {
     BeginPhaseCommand,
 } from "../commands";
@@ -17,7 +18,12 @@ export function beginPhaseReducer(
     command: BeginPhaseCommand,
 ): void {
 
-    context.state.turn.phase = command.phase;
+    if (
+        command.phase === TurnPhase.Fill &&
+        context.state.turn.phase === TurnPhase.Fill
+    ) {
+        return;
+    }
 
     emitEvent(
         context,

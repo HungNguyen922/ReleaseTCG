@@ -16,6 +16,9 @@ import {
     enforceMaxHandReducer,
     endTurnReducer,
     damagePlayerReducer,
+    openParryWindowReducer,
+    playParryReducer,
+    resolveParryChainReducer,
 } from "../reducers";
 
 export function processCommand(
@@ -53,6 +56,18 @@ export function processCommand(
             beginAttackReducer(context, command);
             return;
 
+        case CommandType.OpenParryWindow:
+            openParryWindowReducer(context, command);
+            return;
+
+        case CommandType.PlayParry:
+            playParryReducer(context, command);
+            return;
+
+        case CommandType.ResolveParryChain:
+            resolveParryChainReducer(context, command);
+            return;
+            
         case CommandType.ResolveAttack:
             resolveAttackReducer(context, command);
             return;
@@ -76,7 +91,8 @@ export function processCommand(
         case CommandType.DamagePlayer:
             damagePlayerReducer(context, command);
             return;
-
+        
+            
         default:
             throw new Error(
                 `Unhandled command: ${command.type}`,

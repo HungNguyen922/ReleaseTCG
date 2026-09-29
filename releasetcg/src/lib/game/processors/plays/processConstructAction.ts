@@ -2,7 +2,7 @@ import { EngineContext } from "@/lib/game/EngineContext";
 
 import { ConstructAction } from "@/lib/game/actions";
 
-import { createCreateGateCommand, createMoveCardCommand, createBeginAttackCommand, createBeginPhaseCommand } from "@/lib/game/commands";
+import { createCreateGateCommand, createMoveCardCommand, createOpenParryWindowCommand } from "@/lib/game/commands";
 
 import {
 
@@ -84,7 +84,7 @@ export function processConstructAction(
     //
 
     context.commandQueue.push(
-        createBeginAttackCommand({ gate: action.gate }),
+        createOpenParryWindowCommand(action.player, [action.gate], action.cards),
     );
 
     incrementCardsPlayedThisTurn(context, action.cards.length);
